@@ -140,20 +140,20 @@ class TestSearch(TestCase):
 
         cls.topic2 = topic2['topic']
 
-    def test_search(self):
-        """Test search functionality"""
-        res = ntc.search('topic')
-        print(res)
+    # def test_search(self):
+    #     """Test search functionality"""
+    #     res = ntc.search('topic')
+    #     print(res)
 
-    def test_search_name(self):
-        """Test search functionality"""
-        res = ntc.search('zebedee')
-        print(res)
+    # def test_search_name(self):
+    #     """Test search functionality"""
+    #     res = ntc.search('zebedee')
+    #     print(res)
 
-    def test_search_description(self):
-        """Test search description"""
-        res = ntc.search('unusual')
-        print(res)
+    # def test_search_description(self):
+    #     """Test search description"""
+    #     res = ntc.search('unusual')
+    #     print(res)
 
 
 
