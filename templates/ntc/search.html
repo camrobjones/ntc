@@ -1,0 +1,80 @@
+
+<transition name='modal-swoop'>
+<div id='search-container' class='ntc-modal' v-if="modal=='search'">
+    <!-- Searchbar -->
+    <div id='searchbar-container'>
+        <input id='searchbar' v-model="search.query" @keydown="clearSearchTimer" @keyup="setSearchTimer"
+        autocomplete="off">
+
+        <div id='searchbar-icon-container'>
+            <button id="searchbar-icon-btn" class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" aria-label="Search" @click="searchQuery">
+
+                <span class="material-icons" id='searchbar-icon'>
+                  search
+                </span>
+            </button>
+
+            <div id='search-spinner-container' :class="{ 'show': search.searches.length > 0 }">
+                <div id = "search-spinner" class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div id='search-results-container'>
+
+      <!-- Result -->
+      <div v-for="result in search.results" class='search-result'
+      @click="getTopic(result.id)">
+
+        <!-- Icon -->
+        <div class='search-res-icon-container'>
+              <span class="material-icons search-res-icon">
+                [[get_cat_icon(result.category)]]
+              </span>
+        </div>
+
+        <div class='search-res-info-container'>
+
+            <div class='search-res-row'>
+
+                <!-- Name -->
+                <div class='search-result-name'>
+                  [[result.name]]
+                </div>
+
+            </div>
+
+            <div class='search-res-row'>
+
+                <!-- Desc -->
+                <div class='search-result-desc'>
+                  [[trunc(result.description, 100)]]
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class='search-res-profile-info-container'>
+
+            <div class='search-res-check-container'>
+
+                <span class="material-icons search-res-check" v-if="result.voted">
+                    check
+                </span>
+
+            </div>
+
+        </div>
+
+      </div>
+
+    </div>
+</div>
+</transition>

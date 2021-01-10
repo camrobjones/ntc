@@ -1,0 +1,53 @@
+
+<header id="ntc-nav" class="mdc-top-app-bar">
+  <div class="mdc-top-app-bar__row">
+
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+      <div id='ntc-title' class="mdc-top-app-bar__title">
+        <div class='ntc-title-row' id='ntc-title-norm'>
+          NORM THE
+        </div>
+        <!-- <div class='ntc-title-row' id='ntc-title-the'>
+          THE
+        </div> -->
+        <div class='ntc-title-row' id='ntc-title-compass'>
+          COMPASS
+        </div>
+      </div>
+    </section>
+
+    <section id='ntc-toolbar' class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+
+      <!-- Random -->
+      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" aria-label="Random" :class="{ hide: search.active }" @click="randomTopic">
+        <span class="material-icons">
+          cached
+        </span>
+      </button>
+
+      <!-- Create -->
+      <button class="material-icons mdc-icon-button mdc-top-app-bar__action-item toolbar-btn" aria-label="Create" :class="{ hide: search.active }" @click="toggleCreate">
+        <span class="material-icons">
+          add
+        </span>
+      </button>
+
+        <!-- Search -->
+      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" aria-label="Search" @click="toggleSearch">
+        <span class="material-icons">
+          search
+        </span>
+      </button>
+
+      <!-- Account -->
+      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" id="account-toolbar-btn" aria-label="Account">
+        <span class="material-icons" id="account-toolbar-icon">
+          account_circle
+        </span>
+      </button>
+      
+      <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>
+    
+     </section>
+  </div>
+</header>

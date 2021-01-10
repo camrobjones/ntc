@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Meta -->
+    <title>Norm the Compass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Political Compass, libertarian, authoritarian, left, right">
+    <meta name="description" content="Crowdsourcing norms on what the axes of the political compass mean.">
+    <meta name="author" content="Cameron Jones">
+
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'bootstrap-4.3.1-dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'jquery-3.3.1.min.js' %}"> </script>
+    <script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"> </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Vue -->
+    <script src="{% static 'vue/vue.js' %}"></script>
+
+    <!-- Google Fonts -->
+    <link href="{% static 'fonts/fonts.css' %}" rel="stylesheet">
+
+    <!-- Google MDC -->
+    <link href="{% static 'google-mdc/mdc.css' %}" rel="stylesheet">
+    <script src="{% static 'google-mdc/mdc.js' %}"></script>
+
+    <!-- Google MDC Icons -->
+    <link href="{% static 'google-mdc/icons.css' %}"
+      rel="stylesheet">
+
+    <!-- Local Style -->
+    <link rel="stylesheet" href="{% static 'ntc/main_v0.css' %}">
+
+    <!-- Cookies -->
+    <script src="{% static 'cookies/cookies.min.js' %}"></script>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon_io/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon_io/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon_io/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon_io/site.webmanifest' %}">
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+
+
+<div id='app'>
+
+    {% include 'ntc/nav.html' %}
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<!-- Local JS -->
+<script src="{% static 'ntc/ntc.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+{% extends 'ntc/base.html' %}
+
+{% load static %}
+
+{% block head %}
+
+    <title>Norm the Compass</title>
+
+{% endblock %}
+
+{% block content %}
+
+    <div id='main-container'>
+
+        <div id='topic-container'>
+
+          <div id='topic-name'>
+            [[topic.name]]
+          </div>
+
+          <div id='more-info'>
+            <span class="material-icons" id='more-info-icon'>
+              help_outline
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Compass -->
+        <div id='compass-container'>
+
+          <svg id='compass' width="90%" height="90%" @mousedown="compassMousedown" @mouseover="compassMouseover" @mouseup="compassMouseup" @mouseoff="compassMouseoff"@touchmove="compassTouch">
+
+                <rect class='compass-quadrant' id='auth-left'
+                      width="50%" height="50%">
+                </rect>
+
+                <rect class='compass-quadrant' id='auth-right'
+                      width="50%" height="50%" x="50%">
+                </rect>
+
+                <rect class='compass-quadrant' id='lib-left'
+                      width="50%" height="50%" y="50%">
+                </rect>
+
+                <rect class='compass-quadrant' id='lib-right'
+                      width="50%" height="50%" x="50%" y="50%">
+                </rect>
+
+                <line v-for="index in 20" :key="'h-'+index" :x1="index * 5 + '%'" :x2="index * 5 + '%'" y1="0" y2="100%" stroke="#FFFFFF44">
+                </line>
+
+                <line v-for="index in 20" :key="'v-'+index" :y1="index * 5 + '%'" :y2="index * 5 + '%'" x1="0" x2="100%" stroke="#FFFFFF44">
+                </line>
+
+                <line y1="50%" y2="50%" x1="0" x2="100%" stroke="#44444488" class="gridline major">
+                </line>
+
+                <line x1="50%" x2="50%" y1="0" y2="100%" class="gridline major">
+                </line>
+
+                <!-- User vote -->
+                <circle :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" fill="red" stroke="#44444488">
+                </circle>
+
+                <!-- Other votes -->
+                <template v-if="mode=='review'">
+                  <circle  v-for="vote in topic.info.votes"
+                  :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" fill="#00000044" stroke="#00000044">
+                  </circle>
+                </template>
+
+              <!-- <line v-for="index in 10" :y1="index * 10 + '%'" :y2="index * 10 + '%'" x1="0", x2="100%">
+              </line> -->
+
+            </svg>
+          
+        </div>
+
+        <!-- Control container -->
+        <div id='control-container'>
+
+          <!-- Inputs -->
+          <div id='input-wrapper'>
+
+            <div class='input-container'>
+
+              <label for='x-input' class='ntc-input-label'>X</label>
+
+              <input class='input form-control ntc-input' id='x-input' type="number" step="0.01" min="-10" max="10" v-model.number="vote.x">
+
+            </div>
+
+            <div class='input-container'>
+
+              <label for='y-input' class='ntc-input-label'>Y</label>
+
+              <input class='input form-control ntc-input' id='y-input' type="number" step="0.01" min="-10" max="10" v-model.number="vote.y">
+
+            </div>
+
+          </div>
+
+          <!-- Vote Buttons -->
+          <div class='button-wrapper' v-if="mode=='vote'">
+
+            <!-- <div class='button-container'>
+
+              <button class='btn btn-outline-dark ntc-vote-btn' id='skip-btn'>
+                Skip
+              </button>
+
+            </div> -->
+
+            <div class='button-container'>
+
+              <button class='btn btn-dark ntc-vote-btn' id='submit-btn' @click="submitVote">
+                Submit
+              </button>
+
+            </div>
+
+          </div>
+
+          <!-- Review Button Container -->
+          <div class='button-wrapper' v-else>
+
+            <div class='button-container'>
+
+              <button class='btn btn-dark ntc-vote-btn' id='next-btn' @click="nextTopic">
+                Next
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Comment container -->
+        <div id='comment-container' v-if="'info' in topic">
+
+          <ntc-comment v-for="comment in topic.info.comments"
+           :text="comment.text" :score="comment.score">
+          </ntc-comment> 
+
+        </div>
+
+
+    {% include 'ntc/notify.html' %}
+
+    {% include 'ntc/search.html' %}
+
+    {% include 'ntc/create.html' %}
+
+    </div>
+
+{{topic|json_script:"topic"}}
+
+
+{% endblock %}

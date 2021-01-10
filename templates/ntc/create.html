@@ -1,0 +1,230 @@
+
+<transition name='modal-swoop'>
+<div id='create-container' class='ntc-modal'
+     v-if="modal=='create'">
+
+  <div id='create-inner'>
+    
+    <!-- Header -->
+    <div id='create-header-container'>
+      <h2 id='create-header'>
+        Create Topic
+      </h2>
+    </div>
+
+    <!-- Form -->
+    <form id='create-topic-form'>
+
+      <!-- Name -->
+      <div class='create-topic-section'>
+
+        <div class='create-row'>
+
+          <label class='create-topic-label'>
+            Name
+          </label>
+
+          <span class='create-help'>
+            What do you want to get norms for?
+          </span>
+
+        </div>
+
+        <input class='create-topic-input' type="text" v-model="create.name" @change="validateName">
+
+        <div class='create-row bottom'>
+          <span v-for = "error in create.errors.name" class='create-error' v-html="create.errors.name">
+            
+          </span>
+          <span class='create-count create-help'
+                :class="{ 'warning-text' : create.name.length > 50 }">
+            [[create.name.length]]/50
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Description -->
+      <div class='create-topic-section'>
+
+        <div class='create-row'>
+
+          <label class='create-topic-label'>
+            Description
+          </label>
+
+          <span class='create-help'>
+            Give more context to help people vote.
+          </span>
+
+        </div>
+
+        <textarea class='create-topic-input' v-model="create.description" @change="validateDescription">
+        </textarea>
+
+        <div class='create-row bottom'>
+          <span class='create-error'>
+            [[create.errors.description]]
+          </span>
+          <span class='create-count create-help'
+                :class="{ 'warning-text' : create.description.length > 1000 }">
+            [[create.description.length]]/1000
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Category -->
+      <div class='create-topic-section'>
+
+        <div class='create-row'>
+
+          <label class='create-topic-label'>
+            Category
+          </label>
+
+          <span class='create-help'>
+            Select a category for your topic.
+          </span>
+
+        </div>
+
+        
+
+        <select class='create-topic-input' v-model="create.category" @change="validateCategory">
+          <option value="PER">Person</option>
+          <option value="GOV">Government</option>
+          <option value="POL">Policy</option>
+          <option value="WOR">Work</option>
+          <option value="PHI">Philosophy</option>
+          <option value="OTH">Other</option>
+        </select>
+
+        <div class='create-row bottom'>
+          <span class='create-error'>
+            [[create.errors.category]]
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Link -->
+      <div class='create-topic-section'>
+
+        <div class='create-row'>
+
+          <label class='create-topic-label'>
+            Link (optional)
+          </label>
+
+          <span class='create-help'>
+            Link to more information (e.g. wikipedia).
+          </span>
+
+        </div>
+
+        <input class='create-topic-input' type="text"
+               v-model="create.url" @change="validateURL">
+        
+        <div class='create-row bottom'>
+          <span class='create-error'>
+            [[create.errors.url]]
+          </span>
+        </div>
+
+      </div>
+
+    </form>
+
+    <!-- Similar Topics -->
+    <transition name="grow-fade">
+    <div id='similar-topics' class='create-topic-section popout' v-if="create.similar.topics.length > 0">
+
+      <div class='popout-header-container'>
+        
+        <h3 class='popout-header'>
+          [[create.similar.topics.length]] similar topics found!
+        </h3>
+
+        <span class='create-help' v-html="create.similar.message">
+          It looks like a similar topic already exists. You can click below to vote on it instead of creating a new topic.
+        </span>
+
+      </div>
+
+      <div class='results-container'>
+      
+        <!-- Result -->
+        <div v-for="result in create.similar.topics" class='search-result slim'
+        @click="getTopic(result.id)">
+
+          <!-- Icon -->
+          <div class='search-res-icon-container'>
+                <span class="material-icons search-res-icon">
+                  [[get_cat_icon(result.category)]]
+                </span>
+          </div>
+
+          <div class='search-res-info-container'>
+
+              <div class='search-res-row'>
+
+                  <!-- Name -->
+                  <div class='search-result-name'>
+                    [[result.name]]
+                  </div>
+
+              </div>
+
+              <div class='search-res-row'>
+
+                  <!-- Desc -->
+                  <div class='search-result-desc'>
+                    [[trunc(result.description, 100)]]
+                  </div>
+
+              </div>
+
+          </div>
+
+          <div class='search-res-profile-info-container'>
+
+              <div class='search-res-check-container'>
+
+                  <span class="material-icons search-res-check" v-if="result.voted">
+                      check
+                  </span>
+
+              </div>
+
+          </div>
+
+        </div>
+        <!-- End Result -->
+
+      </div>
+
+    </div>
+    </transition>
+
+    <div class='create-topic-section'>
+
+      <div class='button-container'>
+
+        <button class='btn btn-outline-dark' @click="toggleCreate(false)">
+          Cancel
+        </button>
+
+        <button id="create-submit" class='btn btn-dark' 
+        @click="submitCreate">
+          Submit
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+    
+</div>
+</transition>
