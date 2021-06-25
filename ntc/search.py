@@ -119,7 +119,7 @@ def build_queries(queries):
     return queries
 
 
-def search(queries, min_score=0.1, max_n=None):
+def search(queries, min_score=0, max_n=None):
     """Search for a topic by name"""
     # Annotate with query
     topics = models.Topic.objects.annotate(**queries)
@@ -181,7 +181,7 @@ def check_topic_duplicates(data, max_n=3):
     queries = build_queries(data)
     match = search(queries, max_n=None)
     match = match.filter(
-        Q(name_score__gte=0.8) |
+        Q(name_score__gte=0.5) |
         Q(url_score__gte=0.95) |
         Q(total_score__gte=2.5))
 
