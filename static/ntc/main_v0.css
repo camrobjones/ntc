@@ -10,7 +10,7 @@
 /* General */
 
 body {
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .popout {
@@ -28,7 +28,7 @@ body {
 
 .ntc-modal {
     position: absolute;
-    top: 0;
+    top: 68px;
     width: 100%;
     height: 100%;
     background: #fffffff0;
@@ -54,7 +54,6 @@ body {
 
 header#ntc-nav {
     background-color: var(--ntc-darkest);
-    position: sticky;
 }
 
 
@@ -131,7 +130,6 @@ span#more-info-icon.accent {
 
 div#main-container {
     position: relative;
-    height: calc(100vh - 60px);
 }
 
 div#searchbar-container {
@@ -323,7 +321,7 @@ span.material-icons::before {
 
 div#topic-container {
     padding-top: 1em;
-    width: calc(min(90vw, 60vh));
+    width: calc(min(90vw, 600px));
     margin: auto;
 }
 
@@ -369,7 +367,7 @@ a.topic-info-link {
 
 div#topic-detail-container {
     position: absolute;
-    top: 68px;
+    top: 148px;
     width: 94vw;
     margin: 0 3%;
     background: #FFFFFFee;
@@ -381,7 +379,7 @@ div#topic-detail-container {
 /* Body */
 
 .body-container {
-    width: calc(min(90vw, 60vh));
+    width: calc(min(90vw, 600px));
     margin: auto;
 }
 
@@ -460,20 +458,19 @@ p#compass-body {
 
 div#compass-container {
     width: 100%;
-    max-height: 65vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5em 0 1em 0;
+    padding: 0.7em 0 1em 0;
 }
 
 svg#compass {
     border-radius: 1px;
     border: 1px solid #44444488;
-    max-width: calc(min(90vw, 60vh));
-    max-height: calc(min(90vw, 60vh));
+    max-width: calc(min(90vw, 600px));
+    max-height: calc(min(90vw, 600px));
     width: 90vw;
-    height: 60vh;
+    height: 600px;
 }
 
 .compass-quadrant {

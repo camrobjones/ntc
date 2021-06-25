@@ -12,7 +12,7 @@
 
   {% csrf_token %}
 
-    <div id='main-container'>
+    <main class="mdc-top-app-bar--fixed-adjust">
 
         <div id='topic-container'>
 
@@ -194,7 +194,7 @@
 
     {% include 'ntc/auth.html' %}
 
-    </div>
+    </main>
 
 {{topic|json_script:"topic"}}
 

@@ -12,7 +12,7 @@
 
   {% csrf_token %}
 
-    <div id='main-container'>
+    <main class="mdc-top-app-bar--fixed-adjust">
 
         <div id='banner' class='body-container'>
 
@@ -144,7 +144,8 @@
 
             </svg>
           
-        </div>
+
+      </div>
 
 
     {% include 'ntc/notify.html' %}
@@ -155,7 +156,7 @@
 
     {% include 'ntc/auth.html' %}
 
-    </div>
+    </main>
 
 
 {{topics|json_script:"topics"}}
