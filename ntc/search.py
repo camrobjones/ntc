@@ -183,7 +183,6 @@ def check_topic_duplicates(data, max_n=3):
     match = match.filter(
         Q(name_score__gte=0.8) |
         Q(url_score__gte=0.95) |
-        Q(description_score__gte=0.9) |
         Q(total_score__gte=2.5))
 
     return match[:max_n]
