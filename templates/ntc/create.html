@@ -33,7 +33,7 @@
         <input class='create-topic-input' type="text" v-model="create.name" @change="validateName">
 
         <div class='create-row bottom'>
-          <span v-for = "error in create.errors.name" class='create-error' v-html="create.errors.name">
+          <span v-for = "error in create.errors.name" class='create-error' v-html="error">
             
           </span>
           <span class='create-count create-help'
@@ -63,8 +63,8 @@
         </textarea>
 
         <div class='create-row bottom'>
-          <span class='create-error'>
-            [[create.errors.description]]
+          <span v-for = "error in create.errors.description" class='create-error' v-html="error">
+            
           </span>
           <span class='create-count create-help'
                 :class="{ 'warning-text' : create.description.length > 1000 }">
@@ -101,9 +101,7 @@
         </select>
 
         <div class='create-row bottom'>
-          <span class='create-error'>
-            [[create.errors.category]]
-          </span>
+          <span v-for = "error in create.errors.category" class='create-error' v-html="error">
         </div>
 
       </div>
@@ -114,11 +112,11 @@
         <div class='create-row'>
 
           <label class='create-topic-label'>
-            Link (optional)
+            Link
           </label>
 
           <span class='create-help'>
-            Link to more information (e.g. wikipedia).
+            e.g. wikipedia (optional).
           </span>
 
         </div>
@@ -127,9 +125,7 @@
                v-model="create.url" @change="validateURL">
         
         <div class='create-row bottom'>
-          <span class='create-error'>
-            [[create.errors.url]]
-          </span>
+          <span v-for = "error in create.errors.url" class='create-error' v-html="error">
         </div>
 
       </div>
@@ -211,7 +207,7 @@
 
       <div class='button-container'>
 
-        <button class='btn btn-outline-dark' @click="toggleCreate(false)">
+        <button class='btn btn-outline-dark' @click="clearCreate">
           Cancel
         </button>
 

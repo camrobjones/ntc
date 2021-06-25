@@ -40,6 +40,25 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         related_name="ntc_profile"
     )
+    created = models.DateTimeField(auto_now_add=True)
+    last_active = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='ntc/', default="ntc/default.svg")
+
+    @property
+    def votes(self):
+        """List of dicts of vote data for user"""
+        out = [v.data for v in self.vote_set.all()]
+        return out
+
+    @property
+    def data(self):
+        """Serializable data about Profile"""
+        out = {"username": self.user.username,
+               "created": self.created.isoformat(),
+               "last_active": self.last_active.isoformat(),
+               "votes": self.votes,
+               "image": self.image.url}
+        return out
 
 
 class Tag(models.Model):
@@ -97,6 +116,8 @@ class Topic(models.Model):
         POLICY = "POL", _("Policy")
         GOVERNMENT = "GOV", _("Government")
         COUNTRY = "COU", _("Country")
+        PHILOSOPHY = "PHI", _("Philosophy")
+        WORK = "WOR", _("Work")
         OTHER = "OTH", _("Other")
 
     name = models.CharField(max_length=50)
@@ -143,15 +164,6 @@ class Topic(models.Model):
 
         return self.id
 
-    def generate_slug(self):
-        """Generate slug from name"""
-
-        if self.slug:
-            return self.slug
-
-        if not self.name:
-            self.sl
-
 
 class Vote(models.Model):
     """Profile vote on topic location
@@ -188,6 +200,17 @@ class Vote(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     updated = models.DateTimeField(auto_now=True)
+
+    @property
+    def data(self):
+        """Dict of vote data"""
+        out = {"topic": self.topic.id,
+               "topic_name": self.topic.name,
+               "profile": self.profile.id,
+               "x": self.x,
+               "y": self.y,
+               "updated": self.updated.isoformat()}
+        return out
 
 
 class Comment(models.Model):

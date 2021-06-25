@@ -47,6 +47,16 @@ const cat2icon = {
     "OTH": "more_horiz"
 };
 
+const cat2name = {
+    "PER": "Person",
+    "POL": "Policy",
+    "GOV": "Government",
+    "COU": "Country",
+    "WOR": "Work",
+    "PHI": "Philosophy",
+    "OTH": "Other"
+};
+
 // Data Templates
 
 function createTemplate() {
@@ -71,6 +81,37 @@ function createTemplate() {
     return data;
 }
 
+
+function defaultUser() {
+    let user = {
+        username: "Guest User",
+        is_authenticated: false,
+        image_url: '/static/spyke/images/guest.jpg',
+        stats: {}
+    };
+    return user;
+}
+
+function defaultUserMenu() {
+    let userMenu = {
+            open: false,
+            mode: "login",
+            login: {
+                username: "",
+                password: "",
+                error: "",
+            },
+            signup: {
+                username: "",
+                email: "",
+                password: "",
+                passwordConfirm: "",
+                errors: [],
+            }
+        };
+    return userMenu;
+}
+
 // Vue Setup
 
 Vue.config.delimiters = ["[[", "]]"];
@@ -80,39 +121,75 @@ var app = new Vue({
     delimiters: ['[[', ']]'],
     mounted: function() {
 
+        // Get user
+
+        // Retrieve topic data
+        user = document.getElementById('user');
+        if (user) {
+            this.user = JSON.parse(user.textContent);
+            if (this.user.is_authenticated) {
+                this.userMenu.mode = "profile";
+                this.setUserDates();
+            }
+        }
+
         this.axiosSetup();
 
         // Retrieve topic data
-        topic = JSON.parse(document.getElementById('topic').textContent);
-        if (Object.keys(topic).length > 0) {
-            this.topic = topic;
+        topicEl = document.getElementById('topic');
+        if(topicEl) {
+            topic = JSON.parse(topicEl.textContent);
+            if (Object.keys(topic).length > 0) {
+                this.topic = topic;
 
-            // Check if user has voted
-            if ("info" in topic &&
-                "user_vote" in topic.info &&
-                topic.info.user_vote != null &&
-                "x" in topic.info.user_vote) {
-                this.mode = "review";
-                this.vote = topic.info.user_vote;
+                // Check if user has voted
+                if ("info" in topic &&
+                    "user_vote" in topic.info &&
+                    topic.info.user_vote != null &&
+                    "x" in topic.info.user_vote) {
+                    this.mode = "review";
+                    this.vote = topic.info.user_vote;
+                }
+
+            } else {
+                this.nextTopic();
             }
+        }
 
-        } else {
-            this.nextTopic();
+        // Get topics (home)
+        topics = document.getElementById('topics');
+        if (topics) {
+            this.topics = JSON.parse(topics.textContent);
         }
     },
     data: {
+        // General
+        mode: "vote",
+        modal: "",
+
+        // Home
+        topics: [],
+
+        // Vote
         topic: {},
+        topicInfo: false,
         votes: [],
         vote: {
             x: 0,
             y: 0
         },
-        mode: "vote",
-        modal: "",
+        
+        // Profile
         profile: {},
+        user: defaultUser(),
+        userMenu: defaultUserMenu(),
+
+        // Compass
         compass: {
             dragging: false
         },
+
+        // Search
         search: 
             {
                 query: "",
@@ -121,7 +198,11 @@ var app = new Vue({
                 timer: null,
                 searches: [],
             },
+
+        // Create
         create: createTemplate(),
+
+        // Notifications
         notification: {
             labelText: "",
             actionButtonText: "",
@@ -188,9 +269,41 @@ var app = new Vue({
             return (prop * 100) + '%';
         },
 
+        // Left or right align label?
+        getTextAnchor: function(xval) {
+            if (xval > 5) {
+                return "end";
+            } else {
+                return "start";
+            }
+        },
+
+        // Get x offset
+        getLabelDx: function(xval) {
+            if (xval > 5) {
+                return "-5px";
+            } else {
+                return "5px";
+            }
+        },
+
         // Map categories to icons
         get_cat_icon: function(cat) {
             return cat2icon[cat];
+        },
+
+        // Map categories to names
+        get_cat_name: function(cat) {
+            return cat2name[cat];
+        },
+
+        // Get URL demo for topic links
+        get_url_demo: function(url) {
+            if (url != undefined) {
+                let parts = url.split('/');
+                let host = parts[2];
+                return host;
+            }
         },
 
         // Truncate text
@@ -253,21 +366,41 @@ var app = new Vue({
         // Load new topic
         loadTopic: function(topic) {
             this.topic = topic;
-            this.vote = {"x": 0, "y": 0};
-            this.mode = "vote";
-            this.modal = "";
+            let html = document.getElementsByTagName("html").innerHTML;
+            let urlPath = "/ntc/vote/" + topic.id + "/";
+            window.history.replaceState({"html":html, "pageTitle":document.title},"", urlPath);
+            if (topic.info.user_vote != null) {
+                this.vote = topic.info.user_vote;
+                this.mode = "review";
+            } else {
+                this.vote = {"x": 0, "y": 0};
+                this.mode = "vote";
+            }
+                this.modal = "";
         },
 
+        toggleTopicInfo: function(topic) {
+            this.topicInfo = !this.topicInfo;
+        },
 
         // Get next topic
         nextTopic: function() {
-            let url = "/ntc/next_topic/";
-            this.axios.get(url)
-                .then(response => {
-                    if (response && response.data) {
-                        this.loadTopic(response.data.topic);
-                    }
-            });
+            if (!this.enforceLogin()) {
+                return;
+            }
+            let url = new URL(window.location.href);
+            if (url.pathname.startsWith("/ntc/vote/")) {
+                let url = "/ntc/next_topic/";
+                this.axios.get(url)
+                    .then(response => {
+                        if (response && response.data) {
+                            this.loadTopic(response.data.topic);
+                        }
+                    });
+            } else {
+                
+                window.location.href = "/ntc/vote/";
+            }
         },
 
         // Get next topic
@@ -276,6 +409,7 @@ var app = new Vue({
             this.axios.get(url)
                 .then(response => {
                     if (response && response.data) {
+                        console.log(response);
                         this.loadTopic(response.data.topic);
                     }
             });
@@ -314,17 +448,35 @@ var app = new Vue({
 
         // toggle Modals
         toggleSearch: function(mode) {
+            if (!this.enforceLogin()) {
+                return;
+            }
             if (this.modal == "search") {
                 this.modal = "";
             } else {
                 this.modal = "search";
+                setTimeout(function(){
+                    document.getElementById("searchbar").focus();
+                }, 100);
             }
         },
+        
         toggleCreate: function(mode) {
+            if (!this.enforceLogin()) {
+                return;
+            }
             if (this.modal == "create") {
                 this.modal = "";
             } else {
                 this.modal = "create";
+            }
+        },
+
+        toggleAuth: function(mode) {
+            if (this.modal == "auth") {
+                this.modal = "";
+            } else {
+                this.modal = "auth";
             }
         },
 
@@ -417,11 +569,11 @@ var app = new Vue({
         validateName: function() {
             let name = this.create.name;
             if (name.length < 1) {
-                this.create.errors.name = "Name must contain at least 1 character.";
+                this.create.errors.name = ["Name must contain at least 1 character."];
                 return ;
             }
             if (name.length > 50) {
-                this.create.errors.name = "Name must contain fewer than 50 characters.";
+                this.create.errors.name = ["Name must contain fewer than 50 characters."];
                 return;
             }
             this.create.errors.name = "";
@@ -431,7 +583,7 @@ var app = new Vue({
         validateDescription: function() {
             let description = this.create.description;
             if (description.length > 1000) {
-                this.create.errors.description = "Description must contain fewer than 1000 characters.";
+                this.create.errors.description = ["Description must contain fewer than 1000 characters."];
                 return;
             }
             this.create.errors.description = "";
@@ -441,7 +593,7 @@ var app = new Vue({
         validateCategory: function() {
             let cat = this.create.category;
             if (!(cat in cat2icon)) {
-                this.create.errors.category = "Please select a category.";
+                this.create.errors.category = ["Please select a category."];
                 return;
             }
             this.create.errors.category = "";
@@ -450,7 +602,7 @@ var app = new Vue({
         validateURL: function() {
             let url = this.create.url;
             if (url != "" && !(validURL(url))) {
-                this.create.errors.url = "That URL is not valid.";
+                this.create.errors.url = ["That URL is not valid."];
                 return;
             }
             this.create.errors.url = "";
@@ -522,6 +674,128 @@ var app = new Vue({
                 "type": type || ""
                 };
             this.snackbar.open();
+        },
+
+        // === User Stuff ====
+
+        getUser: function(response) {
+            if (response.data.user.is_authenticated) {
+                    this.user = response.data.user;
+                    this.setUserDates();
+                  }
+        },
+
+        setUserDates: function() {
+        // Transform dates
+                let created = new Date(this.user.created);
+                this.user.created = created.toLocaleDateString();
+
+                let lastActive = new Date(this.user.last_active);
+                this.user.last_active = lastActive.toLocaleDateString();
+            },
+
+        openUserMenu: function(mode){
+            let modes = ["login", "signup", "profile"];
+            if (modes.includes(mode)) {
+                this.userMenu.mode = mode;
+            } else {
+                if (this.user.is_authenticated) {
+                    this.userMenu.mode = "profile";
+                } else {
+                    this.userMenu.mode = "login";
+                }
+            }
+            this.userMenu.open = true;
+            // document.getElementById('main-container')
+            //     .addEventListener('click', function(e) {
+            //         app.dismissModals();
+            //     }, { once: true });
+            },
+
+        loginUser: function() {
+            let url = '/ntc/login_user/';
+            let csrftoken = Cookies.get('csrftoken');
+            let headers = {'X-CSRFToken': csrftoken};
+            let data = this.userMenu.login;
+            axios.post(url,data,{headers: headers})
+              .then(response => {
+                  console.log(response.data);
+                  if (response.data.success) {
+                    this.getUser(response);
+                    this.modal = "";
+                    this.userMenu.mode = "profile";
+                    this.userMenu.login.error = "";
+                    this.notify(`Welcome back, ${app.user.username}!`,
+                                 "Okay", "success");
+                } else {
+                    this.userMenu.login.error = response.data.message;
+                    this.$forceUpdate();
+                }
+                  
+            });
+        },
+
+        logout: function() {
+            let url = '/ntc/logout/'
+            let csrftoken = Cookies.get('csrftoken');
+            let headers = {'X-CSRFToken': csrftoken};
+            axios.get(url,{headers: headers})
+              .then(response => {
+                  console.log(response.data);
+                  if (response.data.success) {
+                    this.user = defaultUser();
+                    this.userMenu = defaultUserMenu();
+                    this.modal = "";
+                    window.location.href = "/ntc/";
+                    this.notify("You have been logged out", "Okay",
+                        "success.");
+                } else {
+                    console.log("Logout failed");
+                    this.notify("Logout failed: try again in a few seconds.",
+                                  "Okay", "error");
+                }
+                  
+            });
+        },
+
+        signup: function() {
+            let url = '/ntc/signup/';
+            let csrftoken = Cookies.get('csrftoken');
+            let headers = {'X-CSRFToken': csrftoken};
+            let data = this.userMenu.signup;
+            axios.post(url,data,{headers: headers})
+              .then(response => {
+                  console.log(response.data);
+                  if (response.data.success) {
+                    this.getUser(response);
+                    this.modal = "";
+                    this.userMenu.mode = "profile";
+                    this.userMenu.signup.errors = [];
+                    this.notify(`Thanks for signing up, ${app.user.username}!`,
+                                 "Okay", "success");
+                } else {
+                    this.userMenu.signup.errors = response.data.errors;
+                    this.$forceUpdate();
+                }
+                  
+            });
+        },
+
+        requestLogin: function() {
+            // Notify user that they need to login and open signup panel
+            this.notify("Please signup or login", "Okay", "error");
+            this.toggleAuth();
+
+        },
+
+        enforceLogin: function() {
+            // Check user is logged in and requestLogin if not
+            if (this.user.is_authenticated) {
+                return true;
+            } else {
+                this.requestLogin();
+                return false;
+            }
         },
     }
 });

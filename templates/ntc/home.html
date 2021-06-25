@@ -1,0 +1,166 @@
+{% extends 'ntc/base.html' %}
+
+{% load static %}
+
+{% block head %}
+
+    <title>Norm the Compass</title>
+
+{% endblock %}
+
+{% block content %}
+
+  {% csrf_token %}
+
+    <div id='main-container'>
+
+        <div id='banner' class='body-container'>
+
+          <h1 id='banner-title'>NORM THE COMPASS</h1>
+
+          <div id='banner-text'>
+
+            <p>A project to collect norms for the political compass.</p>
+
+          </div>
+
+        </div>
+
+        <!-- Home sections -->
+        <div class='home-section-container'>
+
+          <!-- Vote home section -->
+          <div class='home-section'>
+
+            <div class='home-section-icon-container'>
+
+              <span class="material-icons home-icon">
+                how_to_vote
+              </span>
+
+            </div>
+
+            <div class='home-section-text'>
+
+              <h3 class='home-section-title'>
+                <a class='home-section-title' href="/ntc/vote">Vote</a>
+              </h3>
+
+              <p class='home-section-body'>
+                Vote on topics to determine their coordinates.
+              </p>
+
+
+
+            </div>
+
+          </div>
+
+          <!-- Create home section -->
+          <div class='home-section'>
+
+            <div class='home-section-icon-container'>
+
+              <span class="material-icons home-icon">
+                add
+              </span>
+
+            </div>
+
+            <div class='home-section-text'>
+
+              <h3 class='home-section-title'>
+                <a class='home-section-title' href="/ntc/vote">Create</a>
+              </h3>
+
+              <p class='home-section-body'>
+                Create new topics for other users to vote on.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Compass -->
+
+        <div class='body-container'>
+
+          <h2 id='compass-title'> THE COMPASS </h2>
+
+          <p id="compass-body"> Below you can see norms for the top 20 topics. </p>
+
+        </div>
+
+        <!-- Compass -->
+        <div id='compass-container'>
+
+          <svg id='compass' width="90%" height="90%" @mousedown="compassMousedown" @mouseover="compassMouseover" @mouseup="compassMouseup" @mouseoff="compassMouseoff"@touchmove="compassTouch">
+
+                <rect class='compass-quadrant' id='auth-left'
+                      width="50%" height="50%">
+                </rect>
+
+                <rect class='compass-quadrant' id='auth-right'
+                      width="50%" height="50%" x="50%">
+                </rect>
+
+                <rect class='compass-quadrant' id='lib-left'
+                      width="50%" height="50%" y="50%">
+                </rect>
+
+                <rect class='compass-quadrant' id='lib-right'
+                      width="50%" height="50%" x="50%" y="50%">
+                </rect>
+
+                <line v-for="index in 20" :key="'h-'+index" :x1="index * 5 + '%'" :x2="index * 5 + '%'" y1="0" y2="100%" stroke="#FFFFFF44">
+                </line>
+
+                <line v-for="index in 20" :key="'v-'+index" :y1="index * 5 + '%'" :y2="index * 5 + '%'" x1="0" x2="100%" stroke="#FFFFFF44">
+                </line>
+
+                <line y1="50%" y2="50%" x1="0" x2="100%" stroke="#44444488" class="gridline major">
+                </line>
+
+                <line x1="50%" x2="50%" y1="0" y2="100%" class="gridline major">
+                </line>
+
+                <!-- Other votes -->
+                <template>
+                  <circle  v-for="topic in topics"
+                  :cx="valueToCoord(topic.mean_vote.x)" :cy="valueToCoord(-topic.mean_vote.y)" r="5" fill="#FF0000" stroke="#00000088"
+                   >
+                  </circle>
+                  <text v-for="topic in topics"
+                  :x = "valueToCoord(topic.mean_vote.x)" :y="valueToCoord(-topic.mean_vote.y)"
+                  class="compass-label" :text-anchor="getTextAnchor(topic.mean_vote.x)" :dx="getLabelDx(topic.mean_vote.x)">
+                    [[topic.name]]
+                  </text>
+                </template>
+
+              <!-- <line v-for="index in 10" :y1="index * 10 + '%'" :y2="index * 10 + '%'" x1="0", x2="100%">
+              </line> -->
+
+            </svg>
+          
+        </div>
+
+
+    {% include 'ntc/notify.html' %}
+
+    {% include 'ntc/search.html' %}
+
+    {% include 'ntc/create.html' %}
+
+    {% include 'ntc/auth.html' %}
+
+    </div>
+
+
+{{topics|json_script:"topics"}}
+
+{{user|json_script:"user"}}
+
+
+{% endblock %}

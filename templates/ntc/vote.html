@@ -10,18 +10,47 @@
 
 {% block content %}
 
+  {% csrf_token %}
+
     <div id='main-container'>
 
         <div id='topic-container'>
 
-          <div id='topic-name'>
-            [[topic.name]]
+          <div id='topic-name-container'>
+
+            <div id='topic-name'>
+              [[topic.name]]
+            </div>
+
+            <div id='more-info'>
+              <span class="material-icons" id='more-info-icon'
+              @click='toggleTopicInfo' :class="{accent: topicInfo}">
+                help_outline
+              </span>
+            </div>
+
           </div>
 
-          <div id='more-info'>
-            <span class="material-icons" id='more-info-icon'>
-              help_outline
-            </span>
+          <div id='topic-info-container'>
+
+            <div class='topic-catgory-container'>
+              <span class="material-icons topic-icon">
+                [[get_cat_icon(topic.category)]]
+              </span>
+              <span class="topic-info-name">
+                [[get_cat_name(topic.category)]]
+              </span>
+            </div>
+
+            <div class='topic-link-container'>
+              <span class="material-icons topic-icon">
+                link
+              </span>
+              <span class="topic-info-name">
+                <a :href="topic.url" class='topic-info-link'>[[get_url_demo(topic.url)]]</a>
+              </span>
+            </div>
+
           </div>
 
         </div>
@@ -77,6 +106,16 @@
           
         </div>
 
+        <div id='topic-detail-container' v-if="topicInfo">
+
+          <div id='topic-detail'>
+
+            [[topic.description]]
+
+          </div>
+
+        </div>
+
         <!-- Control container -->
         <div id='control-container'>
 
@@ -127,7 +166,7 @@
 
             <div class='button-container'>
 
-              <button class='btn btn-dark ntc-vote-btn' id='next-btn' @click="nextTopic">
+              <button class='btn btn-outline-dark ntc-vote-btn' id='next-btn' @click="nextTopic">
                 Next
               </button>
 
@@ -138,13 +177,13 @@
         </div>
 
         <!-- Comment container -->
-        <div id='comment-container' v-if="'info' in topic">
+        <!-- <div id='comment-container' v-if="'info' in topic">
 
           <ntc-comment v-for="comment in topic.info.comments"
            :text="comment.text" :score="comment.score">
           </ntc-comment> 
 
-        </div>
+        </div> -->
 
 
     {% include 'ntc/notify.html' %}
@@ -153,9 +192,13 @@
 
     {% include 'ntc/create.html' %}
 
+    {% include 'ntc/auth.html' %}
+
     </div>
 
 {{topic|json_script:"topic"}}
+
+{{user|json_script:"user"}}
 
 
 {% endblock %}

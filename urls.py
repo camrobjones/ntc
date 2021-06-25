@@ -13,6 +13,11 @@ urlpatterns = [
     path('vote/', views.vote),
     path('vote/<int:topic_id>/', views.topic),
 
+    # User views
+    path('login_user/', views.login_user),
+    path('signup/', views.signup),
+    path('logout/', views.logout_user),
+
     # API views
     path('create_topic/', views.create_topic),
     path('check_topic_duplicates/', views.check_topic_duplicates),

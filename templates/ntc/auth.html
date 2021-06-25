@@ -1,0 +1,252 @@
+{% load static %}
+
+<transition name='modal-swoop'>
+<div id='auth-container' class='ntc-modal'
+     v-if="modal=='auth'">
+
+  <div id='auth-inner'>
+    
+    <!-- User Menu -->
+        <div id='user-menu-container' :class="{open: userMenu.open}">
+            <div id='user-menu' class='pop light'>
+
+                <!-- Login Menu -->
+                <div id='login-menu' v-if="userMenu.mode == 'login'">
+                    <h2 class="user-menu-title">
+                        Login
+                    </h2>
+                    <div class='user-menu-input-container'>
+                        <label for="username-input" class='user-menu-label'>Username or email</label>
+                        <input type="text" class="user-menu-input form-control" id="username-input" v-model="userMenu.login.username">
+                    </div>
+
+                    <div class='user-menu-input-container'>
+                        <label for="username-input" class='user-menu-label'>Password</label>
+                        <input type="password" class="user-menu-input form-control" id="password-input" v-model="userMenu.login.password" v-on:keyup.enter="loginUser">
+                        
+                    </div>
+
+                    <div class='user-menu-error'>
+                        [[userMenu.login.error]]
+                    </div>
+
+                    <div class='user-menu-button-container'>
+
+                        <button class="mdc-button mdc-button--outlined" @click="openUserMenu('signup')">
+                          <div class="mdc-button__ripple"></div>
+                          <span class="mdc-button__label">Signup</span>
+                        </button>
+
+                        <button class="mdc-button mdc-button--raised login-btn" @click="loginUser">
+                            <div class="mdc-button__ripple"></div>
+                          <span class="mdc-button__label">Login</span>
+                        </button>
+
+                    </div>
+
+                </div>
+                <!-- End Login Menu -->
+
+                <!-- Signup Menu -->
+                <div id='signup-menu' v-if="userMenu.mode == 'signup'">
+                    <h2 class="user-menu-title">
+                        Signup
+                    </h2>
+                    <div class='user-menu-input-container'>
+                        <label for="username-input" class='user-menu-label'>Username</label>
+                        <input type="text" class="user-menu-input form-control" id="username-input" v-model="userMenu.signup.username">
+                    </div>
+
+                    <div class='user-menu-input-container'>
+                        <label for="email-input" class='user-menu-label'>Email</label>
+                        <input type="email" class="user-menu-input form-control" id="email-input" v-model="userMenu.signup.email">
+                    </div>
+
+                    <div class='user-menu-input-container'>
+                        <label for="username-input" class='user-menu-label'>Password</label>
+                        <input type="password" class="user-menu-input form-control" id="password-input" v-model="userMenu.signup.password">
+                    </div>
+
+                    <div class='user-menu-input-container'>
+                        <label for="username-input" class='user-menu-label'>Confirm Password</label>
+                        <input type="password" class="user-menu-input form-control" id="passwordConfirm-input" v-model="userMenu.signup.passwordConfirm"
+                        v-on:keyup.enter="signup">
+                    </div>
+
+                    <div class='user-menu-error'>
+                        <ul class='error-list'>
+                            <li class='error-item' v-for='err in userMenu.signup.errors'> [[err]]</li>
+                        </ul>
+                    </div>
+
+                    <div class='user-menu-button-container'>
+
+                        <button class="mdc-button mdc-button--outlined" @click="openUserMenu('login')">
+                          <div class="mdc-button__ripple"></div>
+                          <span class="mdc-button__label">Login</span>
+                        </button>
+
+                        <button class="mdc-button mdc-button--raised login-btn" @click="signup">
+                            <div class="mdc-button__ripple"></div>
+                          <span class="mdc-button__label">Signup</span>
+                        </button>
+
+                    </div>
+
+                </div>
+                <!-- End Signup -->
+
+                <!-- Profile Menu -->
+                <div id='profile-menu' v-if="userMenu.mode == 'profile'">
+                    
+                    <div id="profile-container">
+
+                        <div id='user-banner'>
+                            <div id='user-img-container'>
+                                <input type="file" 
+                                       id="img-upload"
+                                       accept="image/*">
+                                <img id='user-img' 
+                                     :src="user.image">
+                                <div id="user-img-cover">
+                                    <svg id='upload-icon' height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="#2a2e3b" stroke-linecap="round" stroke-linejoin="round" transform="translate(3 3)"><path d="m10.326 1.666.016 5.641-5.673.016" transform="matrix(.70710678 -.70710678 -.70710678 -.70710678 5.376348 12.979652)"/><path d="m7.522.521v11.979"/><path d="m.5 9v4.5c0 1.1045695.8954305 2 2 2h10c1.1045695 0 2-.8954305 2-2v-4.5"/></g></svg>
+                                </div>
+                            </div>
+                            <h2 id='username'>[[user.username]]</h2>
+                        </div>
+
+                        <div id='stat-container'>
+
+                            <div id='stat-body'>
+
+                                <div class='stat'>
+                                    <span class='stat-label'>
+                                        User Since:
+                                    </span>
+                                    <span class='stat-value'>
+                                        [[user.created]]
+                                    </span>
+                                </div>
+
+                                <div class='stat'>
+                                    <span class='stat-label'>
+                                        Last Active:
+                                    </span>
+                                    <span class='stat-value'>
+                                        [[user.last_active]]
+                                    </span>
+                                </div>
+
+                                <div class='stat'>
+                                    <span class='stat-label'>
+                                        No. votes:
+                                    </span>
+                                    <span class='stat-value'>
+                                        [[user.votes.length]]
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div id='user-compass-container'>
+
+                        <h2 id='user-compass-title'>Your Compass</h2>
+
+                        <p>Below you can see all of the topics you have voted on</p>
+
+                        <!-- Compass -->
+                        <div id='compass-container'>
+
+                          <svg id='compass' width="90%" height="90%" @mousedown="compassMousedown" @mouseover="compassMouseover" @mouseup="compassMouseup" @mouseoff="compassMouseoff"@touchmove="compassTouch">
+
+                                <rect class='compass-quadrant' id='auth-left'
+                                      width="50%" height="50%">
+                                </rect>
+
+                                <rect class='compass-quadrant' id='auth-right'
+                                      width="50%" height="50%" x="50%">
+                                </rect>
+
+                                <rect class='compass-quadrant' id='lib-left'
+                                      width="50%" height="50%" y="50%">
+                                </rect>
+
+                                <rect class='compass-quadrant' id='lib-right'
+                                      width="50%" height="50%" x="50%" y="50%">
+                                </rect>
+
+                                <line v-for="index in 20" :key="'h-'+index" :x1="index * 5 + '%'" :x2="index * 5 + '%'" y1="0" y2="100%" stroke="#FFFFFF44">
+                                </line>
+
+                                <line v-for="index in 20" :key="'v-'+index" :y1="index * 5 + '%'" :y2="index * 5 + '%'" x1="0" x2="100%" stroke="#FFFFFF44">
+                                </line>
+
+                                <line y1="50%" y2="50%" x1="0" x2="100%" stroke="#44444488" class="gridline major">
+                                </line>
+
+                                <line x1="50%" x2="50%" y1="0" y2="100%" class="gridline major">
+                                </line>
+
+                                <!-- Other votes -->
+                                <template>
+                                  <circle  v-for="vote in user.votes"
+                                  :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" fill="#FF0000" stroke="#00000088"
+                                   >
+                                  </circle>
+                                  <text v-for="vote in user.votes"
+                                  :x = "valueToCoord(vote.x)" :y="valueToCoord(-vote.y)"
+                                  class="compass-label" :text-anchor="getTextAnchor(vote.x)" :dx="getLabelDx(vote.x)">
+                                    [[vote.topic_name]]
+                                  </text>
+                                </template>
+
+                              <!-- <line v-for="index in 10" :y1="index * 10 + '%'" :y2="index * 10 + '%'" x1="0", x2="100%">
+                              </line> -->
+
+                            </svg>
+                          
+                        </div>
+
+                    </div>
+
+                    <div class='user-menu-button-container'>
+
+                        <button class="mdc-button mdc-button--raised" @click="logout">
+                          <div class="mdc-button__ripple"></div>
+                          <span class="mdc-button__label">Logout</span>
+                        </button>
+
+                    </div>
+
+
+                    <!-- <div id='user-profile-menu'>
+                      <ul id="profile-menu-list" class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+
+                        <li class="mdc-list-item profile-list-item" role="menuitem" @click="logout">
+                          <span class="mdc-list-item__ripple"></span>
+                          <div class='profile-menu-item'>
+                            <span class="material-icons profile-menu-icon">
+                            exit_to_app
+                            </span>
+
+                            <span class="mdc-list-item__text">Logout</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div> -->
+
+                </div>
+                <!-- End Profile -->
+
+
+            </div>
+        </div>
+
+  </div>
+    
+</div>
+</transition>

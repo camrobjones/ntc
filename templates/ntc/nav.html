@@ -2,26 +2,28 @@
 <header id="ntc-nav" class="mdc-top-app-bar">
   <div class="mdc-top-app-bar__row">
 
-    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-      <div id='ntc-title' class="mdc-top-app-bar__title">
-        <div class='ntc-title-row' id='ntc-title-norm'>
-          NORM THE
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start" id="ntc-logo">
+      <a href="/ntc/" id='logo'>
+        <div id='ntc-title' class="mdc-top-app-bar__title">
+          <div class='ntc-title-row' id='ntc-title-norm'>
+            NORM THE
+          </div>
+          <!-- <div class='ntc-title-row' id='ntc-title-the'>
+            THE
+          </div> -->
+          <div class='ntc-title-row' id='ntc-title-compass'>
+            COMPASS
+          </div>
         </div>
-        <!-- <div class='ntc-title-row' id='ntc-title-the'>
-          THE
-        </div> -->
-        <div class='ntc-title-row' id='ntc-title-compass'>
-          COMPASS
-        </div>
-      </div>
+      </a>
     </section>
 
     <section id='ntc-toolbar' class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
 
-      <!-- Random -->
-      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" aria-label="Random" :class="{ hide: search.active }" @click="randomTopic">
+      <!-- Vote -->
+      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" aria-label="Random" :class="{ hide: search.active }" @click="nextTopic">
         <span class="material-icons">
-          cached
+          how_to_vote
         </span>
       </button>
 
@@ -40,13 +42,13 @@
       </button>
 
       <!-- Account -->
-      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" id="account-toolbar-btn" aria-label="Account">
+      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-btn" id="account-toolbar-btn" aria-label="Account" @click="toggleAuth">
         <span class="material-icons" id="account-toolbar-icon">
           account_circle
         </span>
       </button>
       
-      <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>
+      <!-- <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button> -->
     
      </section>
   </div>

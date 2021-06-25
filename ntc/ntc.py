@@ -56,6 +56,21 @@ def generate_topic_slug(topic):
     return slug
 
 
+def get_mean_coords(topic):
+    """Return mean coordinates for topic"""
+
+    votes = topic.vote_set.all()
+    votes = list(votes.values('profile_id', 'x', 'y'))
+
+    # Calculate mean position
+    if len(votes) > 0:
+        mean_x = mean([vote['x'] for vote in votes])
+        mean_y = mean([vote['y'] for vote in votes])
+        return {"x": mean_x, "y": mean_y}
+
+    return {}
+
+
 """
 Retrieve
 --------
@@ -75,12 +90,7 @@ def get_topic_info(topic, profile):
         profile=profile).values('x', 'y').first()
 
     # Calculate mean position
-    if len(votes) > 2:
-        mean_x = mean([vote['x'] for vote in votes])
-        mean_y = mean([vote['y'] for vote in votes])
-        mean_vote = {"x": mean_x, "y": mean_y}
-    else:
-        mean_vote = {}
+    mean_vote = get_mean_coords(topic)
 
     # Retrieve comments
     comments = list(topic.comment_set.all().values())
@@ -127,6 +137,23 @@ def get_random_topic(profile):
         topic = models.Topic.objects.filter(pk=topic_id)
         if topic.exists():
             return get_topic_info(topic.get(), profile)
+
+
+def get_top_20_topics():
+    """Retrieve the top 20 topics with topic info"""
+    topics = models.Topic.objects.annotate(no_votes=Count('vote'))
+    topics = topics.order_by('-no_votes')
+    topics = topics[:20]
+
+    topic_info_list = []
+
+    for topic in topics:
+        topic_info = {}
+        topic_info['name'] = topic.name
+        topic_info['mean_vote'] = get_mean_coords(topic)
+        topic_info_list.append(topic_info)
+
+    return topic_info_list
 
 
 """

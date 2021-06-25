@@ -84,6 +84,20 @@ def get_profile(user):
     return profile
 
 
+def get_user(request):
+    """Retrieve user data from request"""
+    user = request.user
+    if not user.is_authenticated:
+        return {"is_authenticated": False}
+
+    profile = get_profile(user)
+
+    data = profile.data
+    data["is_authenticated"] = True
+
+    return data
+
+
 def get_api_data(request, kwargs):
     """Combine data sources"""
     data = parse_request(request)
