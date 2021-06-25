@@ -113,7 +113,7 @@ def rank_topics_for_user(profile):
 
     # Order by popularity
     topics = topics.annotate(no_votes=Count('vote'))
-    return topics.order_by('-no_votes')
+    return topics.order_by('-no_votes', 'created')
 
 
 def get_topic_by_id(profile, topic_id):
