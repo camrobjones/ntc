@@ -138,6 +138,7 @@ var app = new Vue({
         // Retrieve topic data
         topicEl = document.getElementById('topic');
         if(topicEl) {
+            this.page = "vote";
             topic = JSON.parse(topicEl.textContent);
             if (Object.keys(topic).length > 0) {
                 this.topic = topic;
@@ -164,6 +165,7 @@ var app = new Vue({
     },
     data: {
         // General
+        page: "home",
         mode: "vote",
         modal: "",
 
@@ -388,8 +390,8 @@ var app = new Vue({
             if (!this.enforceLogin()) {
                 return;
             }
-            let url = new URL(window.location.href);
-            if (url.pathname.startsWith("/ntc/vote/")) {
+            // Async update if user is already voting
+            if (this.page == "vote") {
                 let url = "/ntc/next_topic/";
                 this.axios.get(url)
                     .then(response => {
@@ -398,21 +400,26 @@ var app = new Vue({
                         }
                     });
             } else {
-                
+                // Redirect if user is home
                 window.location.href = "/ntc/vote/";
             }
         },
 
         // Get next topic
         getTopic: function(topic_id) {
-            let url = `/ntc/get_topic/${topic_id}/`;
-            this.axios.get(url)
-                .then(response => {
-                    if (response && response.data) {
-                        console.log(response);
-                        this.loadTopic(response.data.topic);
-                    }
-            });
+            // Async update if user is already voting
+            if (this.page == "vote") {
+                let url = `/ntc/get_topic/${topic_id}/`;
+                this.axios.get(url)
+                    .then(response => {
+                        if (response && response.data) {
+                            console.log(response);
+                            this.loadTopic(response.data.topic);
+                        }
+                });
+            } else {
+                window.location.href = `/ntc/vote/${topic_id}/`;
+            }
         },
 
         // Get random topic
