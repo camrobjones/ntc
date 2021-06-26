@@ -190,7 +190,7 @@ div#search-spinner {
 }
 
 div#search-results-container {
-    width: 90%;
+    width: 93%;
     margin: auto;
     max-width: 650px;
 }
@@ -205,6 +205,13 @@ div#search-results-container {
     font-size: 1.4em;
     font-weight: 300;
     overflow: hidden;
+    cursor: pointer;
+    padding: 0 10px;
+    border-radius: 25px;
+}
+
+.search-result:hover {
+    background: #00000011;
 }
 
 .search-result.slim {
