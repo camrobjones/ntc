@@ -433,8 +433,9 @@ span.material-icons.home-icon {
     padding: 2px 20px;
 }
 
-a.home-section-title {
+.home-section-title {
     color: var(--ntc-accent);
+    cursor: pointer;
 }
 
 h3.home-section-title {
@@ -511,6 +512,54 @@ line.gridline.major {
 
 text.compass-label {
     font-size: calc(min(1rem, 3.5vw));
+}
+
+.compass-axes {
+    position: absolute;
+    max-width: calc(min(90vw, 600px));
+    max-height: calc(min(90vw, 600px));
+    width: 90vw;
+    height: 600px;
+}
+
+.compass-axis {
+    position: absolute;
+}
+
+#compass-axis-left {
+    top: calc(50% - min(2.4rem, 8.4vw));
+    left: min(1rem, 3.5vw);
+    transform: rotate(90deg);
+    transform-origin: left;
+}
+
+#compass-axis-right {
+    top: calc(50% - min(2.4rem, 8.4vw));
+    right: min(1rem, 3.5vw);
+    transform: rotate(270deg);
+    transform-origin: right;
+}
+
+#compass-axis-top {
+    top: 0;
+    width: 100%;
+}
+
+#compass-axis-bottom {
+    bottom: 0;
+    width: 100%;
+}
+
+.compass-axis-label {
+    font-size: calc(min(1.5rem, 5vw));
+    font-weight: 200;
+    color: #333333;
+}
+
+.compass-label-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 /* Buttons */

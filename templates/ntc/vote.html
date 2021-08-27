@@ -88,6 +88,26 @@
                 <line x1="50%" x2="50%" y1="0" y2="100%" class="gridline major">
                 </line>
 
+                <!-- <text x = "0%" y="50%" class="compass-axis-label" text-anchor="start"
+                      dx="5px" dy="-0.2em">
+                  
+                </text>
+
+                <text x = "100%" y="50%" class="compass-axis-label" text-anchor="end"
+                      dx="-5px" dy="-0.2em">
+                  Right
+                </text>
+
+                <text x = "50%" y="0%" class="compass-axis-label" text-anchor="middle"
+                      dy="1em">
+                  Authoritarian
+                </text>
+
+                <text x = "50%" y="100%" class="compass-axis-label" text-anchor="middle"
+                      dy="-0.2em">
+                  Libertarian
+                </text> -->
+
                 <!-- User vote -->
                 <circle :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" fill="red" stroke="#44444488">
                 </circle>
@@ -103,6 +123,42 @@
               </line> -->
 
             </svg>
+
+            <div class='compass-axes'>
+
+              <div class='compass-axis' id="compass-axis-left">
+                <div class='compass-label-container'>
+                  <span class='compass-axis-label' id='axis-label-left'>
+                    Left
+                  </span>
+                </div>
+              </div>
+
+              <div class='compass-axis' id="compass-axis-top">
+                <div class='compass-label-container'>
+                  <span class='compass-axis-label' id='axis-label-top'>
+                    Authoritarian
+                  </span>
+                </div>
+              </div>
+
+              <div class='compass-axis' id="compass-axis-right">
+                <div class='compass-label-container'>
+                  <span class='compass-axis-label' id='axis-label-right'>
+                    Right
+                  </span>
+                </div>
+              </div>
+
+              <div class='compass-axis' id="compass-axis-bottom">
+                <div class='compass-label-container'>
+                  <span class='compass-axis-label' id='axis-label-bottom'>
+                    Libertarian
+                  </span>
+                </div>
+              </div>
+
+            </div>
           
         </div>
 
