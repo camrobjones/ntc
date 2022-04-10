@@ -108,8 +108,10 @@ def rank_topics_for_user(profile):
     """Rank topics in order of popularity and relevance to user"""
     # TODO: Estimate relevance for user
 
-    # Exclude topics the user has voted on
-    topics = models.Topic.objects.exclude(vote__profile=profile)
+    # Exclude topics the user has voted on or skipped
+    topics = models.Topic.objects.exclude(
+        vote__profile=profile).exclude(
+        skip__profile=profile)
 
     # Order by popularity
     topics = topics.annotate(no_votes=Count('vote'))
@@ -137,6 +139,12 @@ def get_random_topic(profile):
         topic = models.Topic.objects.filter(pk=topic_id)
         if topic.exists():
             return get_topic_info(topic.get(), profile)
+
+
+def get_last_voted_topic(profile):
+    """Return the top ranked unseen topic for the user"""
+    topic = profile.vote_set.order_by("-updated").first().topic
+    return get_topic_info(topic, profile)
 
 
 def get_top_20_topics():
@@ -224,6 +232,19 @@ def submit_vote(profile, data):
             "x": data['x'],
             "y": data['y']
         })
+
+    return True, []
+
+
+def skip_topic(profile, data):
+    """Skip topic for user."""
+    # Retrieve topic
+    topic = models.Topic.objects.get(pk=data['topic_id'])
+
+    # Get or create vote
+    skip, created = models.Skip.objects.get_or_create(
+        profile=profile,
+        topic=topic)
 
     return True, []
 

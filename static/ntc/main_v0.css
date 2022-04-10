@@ -326,7 +326,7 @@ span.material-icons::before {
 /* Topic */
 
 div#topic-container {
-    padding-top: 1em;
+    padding: 1em 0 0.7em 0;
     width: calc(min(90vw, 600px));
     margin: auto;
 }
@@ -468,7 +468,6 @@ div#compass-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.7em 0 1em 0;
 }
 
 svg#compass {
@@ -520,6 +519,7 @@ text.compass-label {
     max-height: calc(min(90vw, 600px));
     width: 90vw;
     height: 600px;
+    pointer-events: none;
 }
 
 .compass-axis {
@@ -527,33 +527,35 @@ text.compass-label {
 }
 
 #compass-axis-left {
-    top: calc(50% - min(2.4rem, 8.4vw));
-    left: min(1rem, 3.5vw);
-    transform: rotate(90deg);
-    transform-origin: left;
+    top: calc(50% - min(2.3rem, 6.4vw));
+    left: min(1rem, 0.2vw);
 }
 
 #compass-axis-right {
-    top: calc(50% - min(2.4rem, 8.4vw));
-    right: min(1rem, 3.5vw);
-    transform: rotate(270deg);
-    transform-origin: right;
+    top: calc(50% - min(2.3rem, 6.4vw));
+    right: min(1rem, 0.2vw);
 }
 
 #compass-axis-top {
     top: 0;
     width: 100%;
+    line-height: 1.1;
 }
 
 #compass-axis-bottom {
     bottom: 0;
     width: 100%;
+    line-height: 1.1;
 }
 
 .compass-axis-label {
-    font-size: calc(min(1.5rem, 5vw));
+    font-size: calc(min(1.5rem, 4.5vw));
     font-weight: 200;
     color: #333333;
+}
+
+#axis-label-right {
+    text-align: right;
 }
 
 .compass-label-container {
@@ -570,7 +572,7 @@ text.compass-label {
 .button-wrapper {
     display: flex;
     justify-content: space-between;
-    /* padding: 0 5vw; */
+    padding: 1em 0; 
     width: 50%;
 }
 
@@ -591,7 +593,7 @@ button#next-btn {
 .button-container {
     flex: 1 1 50%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 div#input-wrapper {
@@ -599,36 +601,51 @@ div#input-wrapper {
     margin-bottom: 1em;
     width: 50%;
     justify-content: flex-start;
-    margin-left: 0.1em;
 }
 
 div#control-container {
-    width: calc(min(90vw, 60vh));
+    width: calc(min(90vw, 600px));
     display: flex;
     margin: auto;
 }
 
 .input-container {
-    display: flex;
     align-items: center;
     justify-content: flex-start;
     margin-right: 1em;
-    flex: 1 1 auto;
+    font-size: 14px;
 }
 
 label.ntc-input-label {
-    width: 2em;
     margin-bottom: 0;
-    display: none;
+    display: inline-block;
 }
 
-.ntc-input {
+/*.ntc-compass-input {
     width: 4.5em;
     max-width: 6em;
     height: 45px;
-    flex: 1 1 45%;
+    color: #444;
+}*/
+
+.ntc-compass-input {
+    width: 3em;
+    max-width: 3em;
+    height: 24px;
+    border: none;
+    color: #444;
+    padding: 0;
+    text-indent: 0.2em;
+    -moz-appearance: textfield;
+    display: inline-block;
+    font-size: 1em;
 }
 
+.ntc-compass-input::-webkit-outer-spin-button,
+    .ntc-compass-input::-webkit-inner-spin-button {  
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 /* Create */
 

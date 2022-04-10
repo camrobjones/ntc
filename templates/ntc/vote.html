@@ -129,7 +129,7 @@
               <div class='compass-axis' id="compass-axis-left">
                 <div class='compass-label-container'>
                   <span class='compass-axis-label' id='axis-label-left'>
-                    Left
+                    Economic</br>Left
                   </span>
                 </div>
               </div>
@@ -145,7 +145,7 @@
               <div class='compass-axis' id="compass-axis-right">
                 <div class='compass-label-container'>
                   <span class='compass-axis-label' id='axis-label-right'>
-                    Right
+                    Economic</br>Right
                   </span>
                 </div>
               </div>
@@ -180,17 +180,17 @@
 
             <div class='input-container'>
 
-              <label for='x-input' class='ntc-input-label'>X</label>
+              <label for='x-input' class='ntc-input-label'>X:</label>
 
-              <input class='input form-control ntc-input' id='x-input' type="number" step="0.01" min="-10" max="10" v-model.number="vote.x">
+              <input class='input form-control ntc-compass-input' id='x-input' type="number" step="0.01" min="-10" max="10" v-model.number="vote.x">
 
             </div>
 
             <div class='input-container'>
 
-              <label for='y-input' class='ntc-input-label'>Y</label>
+              <label for='y-input' class='ntc-input-label'>Y:</label>
 
-              <input class='input form-control ntc-input' id='y-input' type="number" step="0.01" min="-10" max="10" v-model.number="vote.y">
+              <input class='input form-control ntc-compass-input' id='y-input' type="number" step="0.01" min="-10" max="10" v-model.number="vote.y">
 
             </div>
 
@@ -199,13 +199,14 @@
           <!-- Vote Buttons -->
           <div class='button-wrapper' v-if="mode=='vote'">
 
-            <!-- <div class='button-container'>
+            <div class='button-container'>
 
-              <button class='btn btn-outline-dark ntc-vote-btn' id='skip-btn'>
+              <button class='btn btn-outline-dark ntc-vote-btn' id='skip-btn'
+              @click="skipTopic">
                 Skip
               </button>
 
-            </div> -->
+            </div>
 
             <div class='button-container'>
 
@@ -240,7 +241,6 @@
           </ntc-comment> 
 
         </div> -->
-
 
     {% include 'ntc/notify.html' %}
 

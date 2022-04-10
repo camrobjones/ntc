@@ -225,6 +225,9 @@ var app = new Vue({
 
             // Snackbar
             this.snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+
+            // Dialog
+            this.outOfTopics = new mdc.dialog.MDCDialog(document.querySelector('.mdc-dialog'));
         },
 
         // Axios
@@ -243,7 +246,7 @@ var app = new Vue({
                 
                 let data = response.data;
 
-                if (!data.success) {
+                if (!data.success && !data.handled) {
                     // Notify lack of success
                     let message = data.error || `Request to ${response.config.url} failed...`;
                     app.notify(message, "Okay", "error");
@@ -396,7 +399,28 @@ var app = new Vue({
                 this.axios.get(url)
                     .then(response => {
                         if (response && response.data) {
-                            this.loadTopic(response.data.topic);
+
+                            if (response.data.success) {
+                                this.loadTopic(response.data.topic);
+                            } else {
+                                // Handle Out of topic Error
+
+                                // Load last voted topic
+                                let data = response.data;
+                                this.mode = "review";
+                                this.topic = data.topic;
+                                this.vote = data.topic.info.user_vote;
+
+                                this.setupMDC(); // Ensure MDC modal is loaded
+                                console.log(this.outOfTopics);
+                                Vue.nextTick(function() {
+                                    app.outOfTopics.open();
+                                });
+                                
+                                this.$forceUpdate();
+                            }
+
+                            
                         }
                     });
             } else {
@@ -450,6 +474,20 @@ var app = new Vue({
                     this.mode = "review";
                     this.topic = data.topic;
                     this.vote = data.topic.info.user_vote;
+                });
+        },
+
+        // Submit vote
+        skipTopic: function() {
+            let url = "/ntc/skip_topic/";
+            let data = {
+                    "topic_id": this.topic.id};
+
+            this.axios.post(url,data)
+                .then(response => {
+                    if (response && response.data) {
+                        this.loadTopic(response.data.topic);
+                    }
                 });
         },
 

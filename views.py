@@ -189,8 +189,15 @@ def get_topic(profile, topic_id):
 @api
 def next_topic(profile):
     """Find and return an unseen topic for the user"""
-    topic = ntc.get_next_topic(profile)
-    return {"topic": topic}
+    try:
+        topic = ntc.get_next_topic(profile)
+    except IndexError:
+        topic = ntc.get_last_voted_topic(profile)
+        return {"success": False,
+                "error": "All topics have been voted on.",
+                "topic": topic,
+                "handled": True}
+    return {"success": True, "topic": topic}
 
 
 @api
@@ -292,6 +299,20 @@ def submit_vote(profile, **data):
     topic_info = ntc.get_topic_by_id(profile, data["topic_id"])
 
     return {'success': success, 'topic': topic_info}
+
+
+@api
+def skip_topic(profile, **data):
+    """Store user vote on a topic and return topic info"""
+
+    success, errors = ntc.skip_topic(profile, data)
+
+    if not success:
+        return {'success': success, 'errors': errors}
+
+    topic = ntc.get_next_topic(profile)
+
+    return {"success": success, "topic": topic}
 
 
 @api

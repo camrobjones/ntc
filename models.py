@@ -213,6 +213,35 @@ class Vote(models.Model):
         return out
 
 
+class Skip(models.Model):
+    """Profile vote on topic location
+
+    Attributes
+    ----------
+    created : datetime
+        Creation timestamp
+    profile : ntc.models.Profile
+        Profile of voter
+    topic : ntc.models.Topic
+        Topic being voted on
+    updated : datetime
+        Last edit timestamp
+    """
+
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE
+    )
+
+    profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE)
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    updated = models.DateTimeField(auto_now=True)
+
+
 class Comment(models.Model):
     """User comments on topics
 

@@ -26,6 +26,7 @@ urlpatterns = [
     path('next_topic/', views.next_topic),
     path('random_topic/', views.random_topic),
     path('submit_vote/', views.submit_vote),
+    path('skip_topic/', views.skip_topic),
     path('submit_comment/', views.submit_comment),
     path('submit_comment_vote/', views.submit_comment_vote),
     ]

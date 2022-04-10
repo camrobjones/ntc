@@ -12,3 +12,32 @@
     </div>
   </div>
 <!-- </div> -->
+
+
+<div id="out-of-topics" class="mdc-dialog">
+  <div class="mdc-dialog__container">
+    <div class="mdc-dialog__surface"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="my-dialog-title"
+      aria-describedby="my-dialog-content">
+      <h2 class="mdc-dialog__title" id="my-dialog-title">
+        You have voted on all topics
+      </h2>
+      <div class="mdc-dialog__content" id="my-dialog-content">
+        You can view your own personal compass in your profile, or create more topics for you and other people to vote on.
+      </div>
+      <div class="mdc-dialog__actions">
+        <button type="button" class="mdc-button mdc-dialog__button" @click="toggleAuth" data-mdc-dialog-action="cancel">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">View my compass</span>
+        </button>
+        <button type="button" class="mdc-button mdc-dialog__button" @click="toggleCreate" data-mdc-dialog-action="cancel">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">Create more topics</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mdc-dialog__scrim"></div>
+</div>
