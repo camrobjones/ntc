@@ -12,7 +12,7 @@
 
   {% csrf_token %}
 
-    <main class="mdc-top-app-bar--fixed-adjust">
+    <main class="mdc-top-app-bar--fixed-adjust" @mousemove="compassMouseover" @mouseup="compassMouseup">
 
         <div id='topic-container'>
 
@@ -58,7 +58,7 @@
         <!-- Compass -->
         <div id='compass-container'>
 
-          <svg id='compass' width="90%" height="90%" @mousedown="compassMousedown" @mouseover="compassMouseover" @mouseup="compassMouseup" @mouseoff="compassMouseoff"@touchmove="compassTouch">
+          <svg id='compass' width="90%" height="90%" @mousedown="compassMousedown" @mouseup="compassMouseup" @mouseoff="compassMouseoff"@touchmove="compassTouch">
 
                 <rect class='compass-quadrant' id='auth-left'
                       width="50%" height="50%">

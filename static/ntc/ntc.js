@@ -340,7 +340,7 @@ var app = new Vue({
             y = (y - 0.5) * -20;
             y = roundTo(y, 2);
             y = miniMax(y, -10, 10);
-        
+            
             // update data
             this.vote.x = x;
             this.vote.y = y;
@@ -359,11 +359,13 @@ var app = new Vue({
             this.updateCoords(evt);
         },
         compassMouseup: function(evt) {
+            if (this.compass.dragging) {
+                this.updateCoords(evt);
+            }
             this.compass.dragging = false;
-            this.updateCoords(evt);
         },
         compassMouseoff: function(evt) {
-            this.compass.dragging = false;
+            // this.compass.dragging = false;
         },
 
         /* == State Updating == */
