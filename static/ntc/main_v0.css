@@ -13,6 +13,14 @@ body {
     /*overflow: hidden;*/
 }
 
+a {
+    color: var(--ntc-accent);
+}
+
+a:focus {
+    color: var(--ntc-accent-dark);
+}
+
 .popout {
     box-shadow: 1px 1px 3px 1px #00000033,
                 1px 1px 5px 2px #00000011;
@@ -114,6 +122,19 @@ div#ntc-title-compass {
     width: 80px;
 }
 
+span#topic-info-icon {
+    color: var(--ntc-darkest);
+    cursor: pointer;
+}
+
+span#topic-info-icon.accent {
+    color: var(--ntc-accent);
+}
+
+span#topic-info-icon:hover {
+    color: var(--ntc-accent);
+}
+
 span#more-info-icon {
     color: #222222;
     font-size: 2em;
@@ -122,6 +143,10 @@ span#more-info-icon {
 }
 
 span#more-info-icon.accent {
+    color: var(--ntc-accent);
+}
+
+span#more-info-icon:hover {
     color: var(--ntc-accent);
 }
 
@@ -371,15 +396,15 @@ a.topic-info-link {
     color: var(--ntc-accent);
 }
 
-div#topic-detail-container {
+.info-container {
     position: absolute;
-    top: 148px;
-    width: 94vw;
-    margin: 0 3%;
-    background: #FFFFFFee;
+    top: 157px;
+    margin-left: calc((100vw - min(94vw, 650px)) / 2);
+    background: #FFFFFFf2;
     border-radius: 5px;
     box-shadow: 0px 0px 5px 1px #00000044;
     padding: 20px;
+    width: calc(min(94vw, 650px));
 }
 
 /* Body */

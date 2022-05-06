@@ -105,7 +105,7 @@ def get_topic_info(topic, profile):
 
 
 def rank_topics_for_user(profile):
-    """Rank topics in order of popularity and relevance to user"""
+    """Rank topics in order of popularity and relevance to user."""
     # TODO: Estimate relevance for user
 
     # Exclude topics the user has voted on or skipped

@@ -112,6 +112,25 @@ function defaultUserMenu() {
     return userMenu;
 }
 
+
+// Vue Directives
+
+Vue.directive('click-outside', {
+  bind: function (el, binding, vnode) {
+    el.clickOutsideEvent = function (event) {
+      // here I check that click was outside the el and his children
+      if (!(el == event.target || el.contains(event.target))) {
+        // and if it did, call method provided in attribute value
+        vnode.context[binding.expression](event);
+      }
+    };
+    document.body.addEventListener('click', el.clickOutsideEvent);
+  },
+  unbind: function (el) {
+    document.body.removeEventListener('click', el.clickOutsideEvent);
+  },
+});
+
 // Vue Setup
 
 Vue.config.delimiters = ["[[", "]]"];
@@ -175,6 +194,7 @@ var app = new Vue({
         // Vote
         topic: {},
         topicInfo: false,
+        instructions: false,
         votes: [],
         vote: {
             x: 0,
@@ -388,6 +408,21 @@ var app = new Vue({
 
         toggleTopicInfo: function(topic) {
             this.topicInfo = !this.topicInfo;
+            this.instructions = false;
+        },
+
+        toggleInstructions: function(topic) {
+            this.instructions = !this.instructions;
+            this.topicInfo = false;
+        },
+
+        closeInfoPopups: function() {
+            if (this.instructions) {
+                this.instructions = false;
+            }
+            if (this.topicInfo) {
+                this.topicInfo = false;
+            }
         },
 
         // Get next topic
