@@ -7,9 +7,12 @@ Helper functions and wrappers for API
 import json
 import logging
 from functools import wraps
+from itertools import count, filterfalse
+import re
 
 from django.http import JsonResponse
 from django.utils import timezone as tz
+from django.contrib.auth import get_user_model, login
 
 from ntc import models
 
@@ -68,6 +71,51 @@ def parse_request(request, method=None):
     return data
 
 
+"""
+Users
+-----
+"""
+
+"""Guest Users"""
+
+
+def generate_guest_username():
+    """Generate a unique guest username."""
+    # Get User model
+    User = get_user_model()
+
+    # Find all names starting with guest
+    guests = User.objects.filter(username__startswith="guest")
+
+    # Get just usernames
+    guest_names = [x[0] for x in guests.values_list("username")]
+
+    # Find the appended numbers
+    guest_matches = [re.match("guest([0-9]+)$", n) for n in guest_names]
+    guest_nos = [int(m.groups()[0]) for m in guest_matches if m]
+
+    # Get the smallest int not in the list
+    new_no = next(filterfalse(set(guest_nos).__contains__, count(1)))
+
+    # Create new guest name with low int
+    return f"guest{new_no}"
+
+
+def create_guest_user():
+    """Create a guest user."""
+    # Get user model
+    User = get_user_model()
+
+    # generate username
+    username = generate_guest_username()
+    email = f"{username}@guest.com"
+    password = User.objects.make_random_password()
+
+    user = User.objects.create_user(username, email, password, guest=True)
+
+    return user
+
+
 def get_profile(user):
     """Get or create profile for user"""
     profile = models.Profile.objects.filter(user=user)
@@ -84,15 +132,21 @@ def get_profile(user):
     return profile
 
 
-def get_user(request):
+def get_user(request, create_guest=True):
     """Retrieve user data from request"""
     user = request.user
     if not user.is_authenticated:
-        return {"is_authenticated": False}
+        if not create_guest:
+            return {"is_authenticated": False}
+
+        user = create_guest_user()
+        login(request, user)
 
     profile = get_profile(user)
 
     data = profile.data
+
+    # if not user.guest:
     data["is_authenticated"] = True
 
     return data

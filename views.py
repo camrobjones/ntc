@@ -21,6 +21,7 @@ from ntc.api import api, get_profile, parse_request, _decode, get_user
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 """
 HTML Views
 ----------
@@ -37,10 +38,14 @@ def vote(request, topic_id=None):
 
 def topic(request, topic_id):
     """Return a view of the given topic"""
-    profile = get_profile(request.user)
+    # TODO: refactor
+    user_data = get_user(request)
+    User = get_user_model()
+    user = User.objects.get(username=user_data["username"])
+    profile = get_profile(user)
 
     topic_info = ntc.get_topic_by_id(profile, topic_id)
-    context = {'user': get_user(request), "topic": topic_info}
+    context = {'user': user_data, "topic": topic_info}
     return render(request, "ntc/vote.html", context)
 
 
@@ -111,7 +116,7 @@ def logout_user(request):
 
 
 def signup(request):
-    """Asynchronously create new user"""
+    """Asynchronously create new user."""
 
     # Retrieve request data
     post = json.loads(request.body.decode('utf-8'), object_hook=_decode)
@@ -157,9 +162,20 @@ def signup(request):
         errors.append("Passwords do not match.")
         return JsonResponse(out)
 
-    # Create User
-    user = User.objects.create_user(username, email, password)
-    login(request, user)
+    # Convert guests
+    if request.user.is_authenticated and request.user.guest:
+        user = request.user
+        user.username = username
+        user.email = email
+        user.guest = False
+        user.set_password(password)
+        user.save()
+
+    # Create new users
+    else:
+        user = User.objects.create_user(username, email, password)
+        login(request, user)
+
     user_data = get_user(request)
     out = {"success": True, "user": user_data}
 

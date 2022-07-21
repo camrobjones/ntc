@@ -11,6 +11,7 @@ import logging
 from statistics import mean
 from copy import deepcopy
 
+import numpy as np
 from django.core.exceptions import ValidationError
 from django.db.models import Q, Count
 from django.utils.text import slugify
@@ -79,8 +80,7 @@ check_topic_duplicates
 
 
 def get_topic_info(topic, profile):
-    """Get info about a specific topic"""
-
+    """Get info about a specific topic."""
     # Retrieve topic votes
     votes = topic.vote_set.exclude(profile=profile)
     votes = list(votes.values('profile_id', 'x', 'y'))
@@ -126,8 +126,16 @@ def get_topic_by_id(profile, topic_id):
 
 def get_next_topic(profile):
     """Return the top ranked unseen topic for the user"""
+    # Rank topics by n votes
     topics = rank_topics_for_user(profile)
-    return get_topic_info(topics[0], profile)
+
+    # Select index with random weighting
+    weights = np.arange(len(topics), 0, -1)
+    dist = weights / sum(weights)
+    draw = int(np.random.choice(range(len(topics)), 1, p=dist)[0])
+
+    # Return selected topic
+    return get_topic_info(topics[draw], profile)
 
 
 def get_random_topic(profile):

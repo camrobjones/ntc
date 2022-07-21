@@ -57,7 +57,8 @@ class Profile(models.Model):
                "created": self.created.isoformat(),
                "last_active": self.last_active.isoformat(),
                "votes": self.votes,
-               "image": self.image.url}
+               "image": self.image.url,
+               "guest": self.user.guest}
         return out
 
 

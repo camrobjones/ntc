@@ -86,6 +86,7 @@ function defaultUser() {
     let user = {
         username: "Guest User",
         is_authenticated: false,
+        guest: true,
         image_url: '/static/spyke/images/guest.jpg',
         stats: {}
     };
@@ -146,7 +147,7 @@ var app = new Vue({
         user = document.getElementById('user');
         if (user) {
             this.user = JSON.parse(user.textContent);
-            if (this.user.is_authenticated) {
+            if (this.user.is_authenticated & this.user.guest == false) {
                 this.userMenu.mode = "profile";
                 this.setUserDates();
             }
@@ -427,9 +428,6 @@ var app = new Vue({
 
         // Get next topic
         nextTopic: function() {
-            if (!this.enforceLogin()) {
-                return;
-            }
             // Async update if user is already voting
             if (this.page == "vote") {
                 let url = "/ntc/next_topic/";
@@ -530,9 +528,6 @@ var app = new Vue({
 
         // toggle Modals
         toggleSearch: function(mode) {
-            if (!this.enforceLogin()) {
-                return;
-            }
             if (this.modal == "search") {
                 this.modal = "";
             } else {
@@ -544,9 +539,6 @@ var app = new Vue({
         },
         
         toggleCreate: function(mode) {
-            if (!this.enforceLogin()) {
-                return;
-            }
             if (this.modal == "create") {
                 this.modal = "";
             } else {
@@ -761,7 +753,8 @@ var app = new Vue({
         // === User Stuff ====
 
         getUser: function(response) {
-            if (response.data.user.is_authenticated) {
+            let user = response.data.user;
+            if (user.is_authenticated) {
                     this.user = response.data.user;
                     this.setUserDates();
                   }
@@ -781,7 +774,7 @@ var app = new Vue({
             if (modes.includes(mode)) {
                 this.userMenu.mode = mode;
             } else {
-                if (this.user.is_authenticated) {
+                if (this.user.is_authenticated & this.user.guest == false) {
                     this.userMenu.mode = "profile";
                 } else {
                     this.userMenu.mode = "login";
