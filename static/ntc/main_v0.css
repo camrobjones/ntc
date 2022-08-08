@@ -38,7 +38,8 @@ a:focus {
     position: absolute;
     top: 68px;
     width: 100%;
-    height: calc(100% - 68px);
+    min-height: calc(100% - 68px);
+    height: fit-content;
     background: #fffffff0;
 }
 
@@ -734,6 +735,7 @@ span.create-error {
 
 #create-submit {
     background: #000000dd;
+    margin-left: 20px;
 }
 
 #create-submit.ready {
