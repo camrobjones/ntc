@@ -129,6 +129,10 @@ def get_next_topic(profile):
     # Rank topics by n votes
     topics = rank_topics_for_user(profile)
 
+    # Show no topics error
+    if not topics:
+        raise IndexError
+
     # Select index with random weighting
     weights = np.arange(len(topics), 0, -1)
     dist = weights / sum(weights)
