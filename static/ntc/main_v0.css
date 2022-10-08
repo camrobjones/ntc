@@ -494,6 +494,7 @@ div#compass-container {
     display: flex;
     align-items: center;
     justify-content: center;
+    outline: none;
 }
 
 svg#compass {
@@ -590,6 +591,11 @@ text.compass-label {
     width: 100%;
 }
 
+#user-vote {
+    /*fill: var(--ntc-accent);*/
+    fill: red;
+}
+
 /* Buttons */
 
 
@@ -672,6 +678,30 @@ label.ntc-input-label {
     -webkit-appearance: none;
     margin: 0;
 }
+
+
+div#vote-info-wrapper {
+    display: flex;
+    width: 50%;
+    justify-content: flex-start;
+}
+
+.vote-info-container {
+    justify-content: center;
+    font-size: 14px;
+    display: flex;
+    flex-flow: column;
+}
+
+b.vote-info-label {
+    display: inline-block;
+    min-width: 45px;
+}
+
+p.vote-info {
+    margin-bottom: 0;
+}
+
 
 /* Create */
 

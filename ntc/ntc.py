@@ -65,8 +65,8 @@ def get_mean_coords(topic):
 
     # Calculate mean position
     if len(votes) > 0:
-        mean_x = mean([vote['x'] for vote in votes])
-        mean_y = mean([vote['y'] for vote in votes])
+        mean_x = round(mean([vote['x'] for vote in votes]), 2)
+        mean_y = round(mean([vote['y'] for vote in votes]), 2)
         return {"x": mean_x, "y": mean_y}
 
     return {}
@@ -91,6 +91,7 @@ def get_topic_info(topic, profile):
 
     # Calculate mean position
     mean_vote = get_mean_coords(topic)
+    no_votes = len(votes) + 1 if user_vote else 0
 
     # Retrieve comments
     comments = list(topic.comment_set.all().values())
@@ -99,7 +100,8 @@ def get_topic_info(topic, profile):
     data['info'] = {"votes": votes,
                     "user_vote": user_vote,
                     "mean_vote": mean_vote,
-                    "comments": comments}
+                    "comments": comments,
+                    "no_votes": no_votes}
 
     return data
 
@@ -225,7 +227,7 @@ def create_topic(data):
         add_tag_to_topic(tag, topic)
 
     out['success'] = True
-    out['topic'] = topic
+    out['topic'] = get_topic_info(topic, data["profile"])
 
     return out
 

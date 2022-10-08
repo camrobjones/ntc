@@ -509,6 +509,11 @@ var app = new Vue({
                     this.mode = "review";
                     this.topic = data.topic;
                     this.vote = data.topic.info.user_vote;
+
+                    // Focus Next
+                    setTimeout(function(){
+                        document.getElementById("next-btn").focus();
+                    }, 100);
                 });
         },
 
@@ -524,6 +529,15 @@ var app = new Vue({
                         this.loadTopic(response.data.topic);
                     }
                 });
+        },
+
+        voteEnter: function() {
+            // shortcut to advance
+            if (this.mode == "vote") {
+                this.submitVote();
+            } else {
+                this.nextTopic();
+            }
         },
 
         // toggle Modals

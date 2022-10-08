@@ -297,9 +297,6 @@ def create_topic(request):
 
     print(data)
 
-    if data['topic']:
-        data['topic'] = ntc.model2json(data['topic'])
-
     return JsonResponse(data)
 
 

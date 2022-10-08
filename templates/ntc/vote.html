@@ -62,7 +62,8 @@
         </div>
 
         <!-- Compass -->
-        <div id='compass-container'>
+        <div id='compass-container' tabindex="0" 
+        @keyup.enter="voteEnter">
 
           <svg id='compass' width="90%" height="90%" @mousedown="compassMousedown" @mouseup="compassMouseup" @mouseoff="compassMouseoff"@touchmove="compassTouch">
 
@@ -114,16 +115,20 @@
                   Libertarian
                 </text> -->
 
-                <!-- User vote -->
-                <circle :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" fill="red" stroke="#44444488">
-                </circle>
-
                 <!-- Other votes -->
                 <template v-if="mode=='review'">
                   <circle  v-for="vote in topic.info.votes"
                   :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" fill="#00000044" stroke="#00000044">
                   </circle>
                 </template>
+
+                <!-- Mean vote -->
+                <circle v-if="topic.info && mode=='review'" :cx="valueToCoord(topic.info.mean_vote.x)" :cy="valueToCoord(-topic.info.mean_vote.y)" r="5" fill="#444444f8" stroke="#44444488">
+                </circle>
+
+                <!-- User vote -->
+                <circle id='user-vote' :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" stroke="#44444488">
+                </circle>
 
               <!-- <line v-for="index in 10" :y1="index * 10 + '%'" :y2="index * 10 + '%'" x1="0", x2="100%">
               </line> -->
@@ -210,8 +215,8 @@
 
         </div>
 
-        <!-- Control container -->
-        <div id='control-container'>
+        <!-- Vote Control container -->
+        <div id='control-container' v-if="mode=='vote'">
 
           <!-- Inputs -->
           <div id='input-wrapper'>
@@ -234,8 +239,8 @@
 
           </div>
 
-          <!-- Vote Buttons -->
-          <div class='button-wrapper' v-if="mode=='vote'">
+          <!-- Buttons -->
+          <div class='button-wrapper'>
 
             <div class='button-container'>
 
@@ -256,8 +261,44 @@
 
           </div>
 
+        </div>
+
+        <!-- Review Control container -->
+        <div id='control-container' v-else>
+
+          <!-- Topic Info -->
+          <div id='vote-info-wrapper'>
+
+            <div class='vote-info-container'>
+
+              <!-- <p class='vote-info'>
+                <b class='vote-info-label'>No. Votes:</b>
+                <span class='vote-info-text'>[[topic.info.no_votes]]</span>
+              </p> -->
+
+              <p class='vote-info'>
+                <b class='vote-info-label' id='vote-info-label'
+                style="color:#d90000">You:</b>
+                <span class='vote-info-text'>
+                  [[topic.info.user_vote.x.toFixed(2)]], [[topic.info.user_vote.y.toFixed(2)]]
+                </span>
+              </p>
+
+              <p class='vote-info'>
+                <b class='vote-info-label'>Mean:</b>
+                <span class='vote-info-text'>
+                  [[topic.info.mean_vote.x.toFixed(2)]], [[topic.info.mean_vote.y.toFixed(2)]] ([[topic.info.no_votes]])
+                </span>
+              </p>
+
+              
+
+            </div>
+
+          </div>
+
           <!-- Review Button Container -->
-          <div class='button-wrapper' v-else>
+          <div class='button-wrapper'>
 
             <div class='button-container'>
 
