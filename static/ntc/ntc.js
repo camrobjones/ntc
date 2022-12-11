@@ -57,6 +57,177 @@ const cat2name = {
     "OTH": "Other"
 };
 
+function buildVegaSpec(data) {
+    let spec = {
+      "$schema": "https://vega.github.io/schema/vega/v5.json",
+      "width": 600,
+      "height": 600,
+      "padding": 5,
+      "data": [
+        {
+          "name": "source",
+          "values": data,
+          "transform": [
+            {
+              "type": "filter",
+              "expr": "datum['topic_name'] != null && datum['x'] != null && datum['y'] != null"
+            }
+          ]
+        }
+      ],
+      "signals": [
+          {
+          "name": "width",
+          "value": "600",
+          "on": [
+            {
+              "events": {
+                "source": "window",
+                "type": "resize"
+              },
+              "update": "containerSize()[0]"
+            },
+            {
+              "events": {
+                "source": "window",
+                "type": "load"
+              },
+              "update": "containerSize()[0]"
+            }
+          ]
+        },
+        {
+          "name": "height",
+          "value": "600",
+          "on": [
+            {
+              "events": {
+                "source": "window",
+                "type": "resize"
+              },
+              "update": "containerSize()[1]"
+            },
+            {
+              "events": {
+                "source": "window",
+                "type": "load"
+              },
+              "update": "containerSize()[0]"
+            }
+          ]
+        }
+      ],
+      "scales": [
+        {
+          "name": "x",
+          "type": "linear",
+          "round": true,
+          "nice": true,
+          "zero": true,
+          "domain": {"data": "source", "field": "x"},
+          "domainMin": -10,
+          "domainMax": 10,
+          "range": "width"
+        },
+        {
+          "name": "y",
+          "type": "linear",
+          "round": true,
+          "nice": true,
+          "zero": true,
+          "domainMin": -10,
+          "domainMax": 10,
+          "domain": {"data": "source", "field": "y"},
+          "range": "height"
+        }
+      ],
+      "axes": [
+        {
+          "scale": "x",
+          "grid": false,
+          "domain": false,
+          "labels": false,
+          "ticks": false,
+          "offset": 0,
+          "orient": "bottom"
+        },
+        {
+          "scale": "y",
+          "grid": false,
+          "domain": false,
+          "labels": false,
+          "ticks": false,
+          "offset": 0,
+          "orient": "left"
+        }
+      ],
+      "legends": [
+      ],
+      "marks": [
+        {
+          "name": "points",
+          "clip": true,
+          "type": "symbol",
+          "from": {"data": "source"},
+          "interactive": true,
+          "hover": {},
+          "encode": {
+            "enter": {
+              "x": {"scale": "x", "field": "x"},
+              "y": {"scale": "y", "field": "y"},
+              "shape": {"value": "circle"},
+              "strokeWidth": {"value": 1},
+              "size": {"signal": "width / 10"},
+              "opacity": {"value": 0.8},
+              "stroke": {"value": "black"},
+              "fill": {"value": "red"},
+              "href": {"signal": "'/ntc/vote/' + datum.topic_id"},
+              "tooltip": {"signal": "{'Topic': datum.topic_name, 'Category': datum.category}"},
+              "cursor": {"value": "pointer"}
+            },
+            "update": {
+              "x": {"scale": "x", "field": "x"},
+              "y": {"scale": "y", "field": "y"},
+              "shape": {"value": "circle"},
+              "strokeWidth": {"value": 1},
+              "size": {"signal": "width / 10"},
+              "opacity": {"value": 0.8},
+              "stroke": {"value": "black"},
+              "fill": {"value": "red"}
+            }
+          }
+        },
+        { 
+          "name": "topics",
+          "type": "text",
+          "clip": true,
+          "from": {"data": "points"},
+          "encode": {
+            "enter": {
+              "text": {"field": "datum.topic_name"},
+              "fontSize": {"signal": "width / 35"},
+            },
+            "update": {
+              "text": {"field": "datum.topic_name"},
+              "fontSize": {"signal": "width / 35"}
+            },
+          },
+          "transform": [
+            {
+              "type": "label",
+              "avoidMarks": ["points"],
+              "offset": [1],
+              "size": {"signal": "[width, height]"}
+            }
+          ]
+        }
+      ],
+      "config": {}
+    }
+
+    return spec;
+}
+
 // Data Templates
 
 function createTemplate() {
@@ -141,6 +312,8 @@ var app = new Vue({
     delimiters: ['[[', ']]'],
     mounted: function() {
 
+        console.log("mounted");
+
         // Get user
 
         // Retrieve topic data
@@ -182,6 +355,10 @@ var app = new Vue({
         if (topics) {
             this.topics = JSON.parse(topics.textContent);
         }
+
+        // Compass setup
+        console.log(this.topics);
+        this.drawCompassCoords(this.topics, '#vis-home');
     },
     data: {
         // General
@@ -288,6 +465,15 @@ var app = new Vue({
         },
 
         /* == Compass == */
+
+        drawCompassCoords: function(data, elId) {
+            // Draw compass co-ords
+            const spec = buildVegaSpec(data);
+            vegaEmbed(elId, spec, {"actions": false})
+              // result.view provides access to the Vega View API
+              .then(result => console.log(result))
+              .catch(console.warn);
+        },
 
         // Find values on the compass
         valueToCoord: function(val) {
@@ -565,6 +751,10 @@ var app = new Vue({
                 this.modal = "";
             } else {
                 this.modal = "auth";
+                this.getUserData();
+                Vue.nextTick(function(){
+                    app.drawCompassCoords(app.user.votes, '#vis-user');
+                });
             }
         },
 
@@ -774,6 +964,30 @@ var app = new Vue({
                   }
         },
 
+        getUserData: function() {
+            let url = '/ntc/get_user_data/';
+            let csrftoken = Cookies.get('csrftoken');
+            let headers = {'X-CSRFToken': csrftoken};
+            axios.get(url,{},{headers: headers})
+              .then(response => {
+                  console.log(response.data);
+                  if (response.data.success) {
+                    this.getUser(response);
+
+                    // Update user compasss
+                    if (this.modal=="auth") {
+                        app.drawCompassCoords(app.user.votes, '#vis-user');
+                    }
+                } else {
+                    this.userMenu.signup.errors = response.data.errors;
+                    this.notify(message,
+                                 "Okay", "error");
+                    this.$forceUpdate();
+                }
+                  
+            });
+        },
+
         setUserDates: function() {
         // Transform dates
                 let created = new Date(this.user.created);
@@ -904,4 +1118,5 @@ Vue.component('ntc-comment', {
 
 window.addEventListener("load", function(){
     app.setupMDC();
+
 });

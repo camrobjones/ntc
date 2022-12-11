@@ -126,22 +126,6 @@
                 <line x1="50%" x2="50%" y1="0" y2="100%" class="gridline major">
                 </line>
 
-                <!-- Other votes -->
-                <template>
-                  <circle  v-for="topic in topics"
-                  :cx="valueToCoord(topic.mean_vote.x)" :cy="valueToCoord(-topic.mean_vote.y)" r="5" fill="#FF0000" stroke="#00000088"
-                   >
-                  </circle>
-                  <text v-for="topic in topics"
-                  :x = "valueToCoord(topic.mean_vote.x)" :y="valueToCoord(-topic.mean_vote.y)"
-                  class="compass-label" :text-anchor="getTextAnchor(topic.mean_vote.x)" :dx="getLabelDx(topic.mean_vote.x)">
-                    [[topic.name]]
-                  </text>
-                </template>
-
-              <!-- <line v-for="index in 10" :y1="index * 10 + '%'" :y2="index * 10 + '%'" x1="0", x2="100%">
-              </line> -->
-
             </svg>
 
             <div class='compass-axes'>
@@ -179,7 +163,8 @@
               </div>
 
             </div>
-          
+
+            <div id="vis-home" class='vega-canvas'></div>
 
       </div>
 
@@ -193,6 +178,7 @@
     {% include 'ntc/auth.html' %}
 
     </main>
+
 
 
 {{topics|json_script:"topics"}}

@@ -36,6 +36,10 @@
     <link href="{% static 'google-mdc/icons.css' %}"
       rel="stylesheet">
 
+    <!-- Vega -->
+    <script src="{% static 'vega/vega.js' %}"></script>
+    <script src="{% static 'vega/vega-embed.js' %}"></script>
+
     <!-- Local Style -->
     <link rel="stylesheet" href="{% static 'ntc/main_v0.css' %}">
 
@@ -61,10 +65,13 @@
     {% block content %}
     {% endblock %}
 
+    {{page_config|json_script:"page_config"}}
+
 </div>
 
 <!-- Local JS -->
 <script src="{% static 'ntc/ntc.js' %}"></script>
+
 
 </body>
 </html>

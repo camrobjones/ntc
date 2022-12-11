@@ -205,11 +205,12 @@ class Vote(models.Model):
     @property
     def data(self):
         """Dict of vote data"""
-        out = {"topic": self.topic.id,
+        out = {"topic_id": self.topic.id,
                "topic_name": self.topic.name,
                "profile": self.profile.id,
                "x": self.x,
                "y": self.y,
+               "category": self.topic.get_category_display(),
                "updated": self.updated.isoformat()}
         return out
 

@@ -193,23 +193,45 @@
                                 <line x1="50%" x2="50%" y1="0" y2="100%" class="gridline major">
                                 </line>
 
-                                <!-- Other votes -->
-                                <template>
-                                  <circle  v-for="vote in user.votes"
-                                  :cx="valueToCoord(vote.x)" :cy="valueToCoord(-vote.y)" r="5" fill="#FF0000" stroke="#00000088"
-                                   >
-                                  </circle>
-                                  <text v-for="vote in user.votes"
-                                  :x = "valueToCoord(vote.x)" :y="valueToCoord(-vote.y)"
-                                  class="compass-label" :text-anchor="getTextAnchor(vote.x)" :dx="getLabelDx(vote.x)">
-                                    [[vote.topic_name]]
-                                  </text>
-                                </template>
-
-                              <!-- <line v-for="index in 10" :y1="index * 10 + '%'" :y2="index * 10 + '%'" x1="0", x2="100%">
-                              </line> -->
-
                             </svg>
+
+                            <div class='compass-axes'>
+
+                              <div class='compass-axis' id="compass-axis-left">
+                                <div class='compass-label-container'>
+                                  <span class='compass-axis-label' id='axis-label-left'>
+                                    Economic</br>Left
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div class='compass-axis' id="compass-axis-top">
+                                <div class='compass-label-container'>
+                                  <span class='compass-axis-label' id='axis-label-top'>
+                                    Authoritarian
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div class='compass-axis' id="compass-axis-right">
+                                <div class='compass-label-container'>
+                                  <span class='compass-axis-label' id='axis-label-right'>
+                                    Economic</br>Right
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div class='compass-axis' id="compass-axis-bottom">
+                                <div class='compass-label-container'>
+                                  <span class='compass-axis-label' id='axis-label-bottom'>
+                                    Libertarian
+                                  </span>
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <div id="vis-user" class='vega-canvas'></div>
                           
                         </div>
 

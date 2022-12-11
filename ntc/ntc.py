@@ -171,8 +171,12 @@ def get_top_20_topics():
 
     for topic in topics:
         topic_info = {}
-        topic_info['name'] = topic.name
-        topic_info['mean_vote'] = get_mean_coords(topic)
+        topic_info["topic_id"] = topic.id
+        topic_info['topic_name'] = topic.name
+        coords = get_mean_coords(topic)
+        topic_info['x'] = coords['x']
+        topic_info['y'] = coords['y']
+        topic_info['category'] = topic.get_category_display()
         topic_info_list.append(topic_info)
 
     return topic_info_list

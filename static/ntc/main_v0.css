@@ -591,15 +591,20 @@ text.compass-label {
     width: 100%;
 }
 
+div.vega-canvas {
+    position: absolute;
+    max-width: calc(min(90vw, 600px));
+    max-height: calc(min(90vw, 600px));
+    width: 90vw;
+    height: 600px;
+}
+
 #user-vote {
     /*fill: var(--ntc-accent);*/
     fill: red;
 }
 
 /* Buttons */
-
-
-
 
 .button-wrapper {
     display: flex;

@@ -32,7 +32,10 @@ Render HTML responses
 def vote(request, topic_id=None):
     """The main voting view"""
     print("Request: ", request, " topic_id ", topic_id)
-    context = {'user': get_user(request)}
+    context = {
+        "user": get_user(request),
+        "view_config": {"view": "vote"}
+    }
     return render(request, "ntc/vote.html", context)
 
 
@@ -45,7 +48,11 @@ def topic(request, topic_id):
     profile = get_profile(user)
 
     topic_info = ntc.get_topic_by_id(profile, topic_id)
-    context = {'user': user_data, "topic": topic_info}
+    context = {
+        "user": user_data,
+        "topic": topic_info,
+        "view_config": {"view": "topic"}
+    }
     return render(request, "ntc/vote.html", context)
 
 
@@ -54,7 +61,8 @@ def home(request):
 
     context = {
         "topics": ntc.get_top_20_topics(),
-        "user": get_user(request)
+        "user": get_user(request),
+        "view_config": {"view": "topic"}
     }
 
     return render(request, "ntc/home.html", context)
@@ -74,6 +82,21 @@ User views
 - logout
 - signup
 """
+
+
+def get_user_data(request):
+    """Get data for logged in user."""
+
+    if request.user.is_authenticated:
+        user_data = get_user(request)
+        out = {"success": True, "user": user_data}
+
+    else:
+        # Return an 'invalid login' error message.
+        message = "Please log in or sign up."
+        out = {"success": False, "message": message}
+
+    return JsonResponse(out)
 
 
 def login_user(request):
