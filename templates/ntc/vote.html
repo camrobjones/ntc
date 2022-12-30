@@ -4,7 +4,7 @@
 
 {% block head %}
 
-    <title>Norm the Compass</title>
+    <title>Point the Compass</title>
 
 {% endblock %}
 
@@ -12,7 +12,7 @@
 
   {% csrf_token %}
 
-    <main class="mdc-top-app-bar--fixed-adjust" @mousemove="compassMouseover" @mouseup="compassMouseup">
+    <main class="mdc-top-app-bar--fixed-adjust" id="main" @mousemove="compassMouseover" @mouseup="compassMouseup">
 
         <div id='topic-container'>
 
@@ -196,9 +196,9 @@
             <p class='instructions'>
               The <a href="https://www.politicalcompass.org/" target="_blank">political compass</a> is an attempt to represent political views
               in a two-dimensional space. The x-axis is the <i>economic scale</i>, with economically left-wing views on the left, and economically right-wing
-              views on the right (makes sense, right?). 
+              views on the right. 
               The y-axis is the <i>social scale</i>, with authoritarian
-              views at the top, and libertarian views at the bottom. Norm the Compass is an attempt to crowdsource data about what these dimensions 
+              views at the top, and libertarian views at the bottom. Point the Compass is an attempt to crowdsource data about what these dimensions 
               mean to different people.
             </p>
 
@@ -321,6 +321,10 @@
 
         </div> -->
 
+    </main>
+
+    {% include 'ntc/footer.html' %}
+
     {% include 'ntc/notify.html' %}
 
     {% include 'ntc/search.html' %}
@@ -328,8 +332,6 @@
     {% include 'ntc/create.html' %}
 
     {% include 'ntc/auth.html' %}
-
-    </main>
 
 {{topic|json_script:"topic"}}
 

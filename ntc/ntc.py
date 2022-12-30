@@ -69,7 +69,7 @@ def get_mean_coords(topic):
         mean_y = round(mean([vote['y'] for vote in votes]), 2)
         return {"x": mean_x, "y": mean_y}
 
-    return {}
+    return {"x": 0, "y": 0}
 
 
 """

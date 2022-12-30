@@ -9,12 +9,12 @@
 
 /* General */
 
-body {
-    /*overflow: hidden;*/
-}
-
 a {
     color: var(--ntc-accent);
+}
+
+a:hover {
+    color: var(--ntc-accent-dark);
 }
 
 a:focus {
@@ -29,6 +29,16 @@ a:focus {
 
 .popout-header-container {
     padding: 10px;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main#main {
+    flex: 1 1 auto;
 }
 
 /* Modals */
@@ -75,6 +85,34 @@ section#ntc-logo {
     overflow: hidden;
 }
 
+/* Footer */
+
+footer#footer {
+    background: black;
+    color: white;
+    font-weight: 100;
+    padding: 1rem 5% 0.5rem 5%;
+    display: flex;
+    justify-content: space-between;
+    font-size: calc(min(1rem, 3.5vw));
+    margin-top:2rem;
+}
+
+p.footer-item {
+    margin-bottom:0.5em;
+}
+
+
+a.footer-link {
+    color: white;
+}
+
+a.footer-link:hover {
+    color: var(--ntc-accent);
+    text-decoration: none;
+    opacity:1;
+
+}
 
 /* Title */
 
@@ -116,7 +154,7 @@ div#ntc-title-the {
 }
 
 div#ntc-title-compass {
-    letter-spacing: 0.09em;
+    letter-spacing: 0.08em;
 }
 
 .ntc-title-row {
@@ -242,8 +280,8 @@ div#search-results-container {
 
 .search-result.slim {
     width: 95%;
-    border-bottom: 1px solid #00000033;
-    border-top: 1px solid #00000033;
+/*    border-bottom: 1px solid #00000033;*/
+/*    border-top: 1px solid #00000033;*/
 }
 
 .result-container {
@@ -333,6 +371,10 @@ span.material-icons.search-res-icon {
     /*background: #000000;*/
     /*box-shadow: 0px 0px 3px 1px #000000;*/
     /*color:--var(ntc-darkest);*/
+}
+
+.toolbar-btn:focus {
+    outline:none;
 }
 
 span.material-icons {
@@ -495,6 +537,7 @@ div#compass-container {
     align-items: center;
     justify-content: center;
     outline: none;
+    margin-bottom:2em;
 }
 
 svg#compass {
@@ -821,6 +864,18 @@ div#auth-inner {
     padding: 20px 0;
     display: flex;
     justify-content: space-between;
+}
+
+a.user-menu {
+    color: #6101ee;
+}
+
+a.user-menu:hover {
+    color: #4c01b9;
+}
+
+.user-menu-error {
+    color: red;
 }
 
 

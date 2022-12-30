@@ -32,10 +32,7 @@
 
                     <div class='user-menu-button-container'>
 
-                        <button class="mdc-button mdc-button--outlined" @click="openUserMenu('signup')">
-                          <div class="mdc-button__ripple"></div>
-                          <span class="mdc-button__label">Signup</span>
-                        </button>
+                        <p>New user? <a class="user-menu" href="#" @click="openUserMenu('signup')">Create an account</a></p>
 
                         <button class="mdc-button mdc-button--raised login-btn" @click="loginUser">
                             <div class="mdc-button__ripple"></div>
@@ -50,7 +47,7 @@
                 <!-- Signup Menu -->
                 <div id='signup-menu' v-if="userMenu.mode == 'signup'">
                     <h2 class="user-menu-title">
-                        Signup
+                        Create Account
                     </h2>
                     <div class='user-menu-input-container'>
                         <label for="username-input" class='user-menu-label'>Username</label>
@@ -81,14 +78,11 @@
 
                     <div class='user-menu-button-container'>
 
-                        <button class="mdc-button mdc-button--outlined" @click="openUserMenu('login')">
-                          <div class="mdc-button__ripple"></div>
-                          <span class="mdc-button__label">Login</span>
-                        </button>
+                        <p>Already signed up? <a class="user-menu" href="#" @click="openUserMenu('login')">Login</a></p>
 
                         <button class="mdc-button mdc-button--raised login-btn" @click="signup">
                             <div class="mdc-button__ripple"></div>
-                          <span class="mdc-button__label">Signup</span>
+                          <span class="mdc-button__label">Sign up</span>
                         </button>
 
                     </div>
@@ -111,7 +105,7 @@
                                 <img id='user-img' 
                                      src="/static/ntc/default.svg">
                                 <div id="user-img-cover">
-                                    <svg id='upload-icon' height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="#2a2e3b" stroke-linecap="round" stroke-linejoin="round" transform="translate(3 3)"><path d="m10.326 1.666.016 5.641-5.673.016" transform="matrix(.70710678 -.70710678 -.70710678 -.70710678 5.376348 12.979652)"/><path d="m7.522.521v11.979"/><path d="m.5 9v4.5c0 1.1045695.8954305 2 2 2h10c1.1045695 0 2-.8954305 2-2v-4.5"/></g></svg>
+                                    <!-- <svg id='upload-icon' height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="#2a2e3b" stroke-linecap="round" stroke-linejoin="round" transform="translate(3 3)"><path d="m10.326 1.666.016 5.641-5.673.016" transform="matrix(.70710678 -.70710678 -.70710678 -.70710678 5.376348 12.979652)"/><path d="m7.522.521v11.979"/><path d="m.5 9v4.5c0 1.1045695.8954305 2 2 2h10c1.1045695 0 2-.8954305 2-2v-4.5"/></g></svg> -->
                                 </div>
                             </div>
                             <h2 id='username'>[[user.username]]</h2>

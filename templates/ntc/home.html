@@ -4,7 +4,7 @@
 
 {% block head %}
 
-    <title>Norm the Compass</title>
+    <title>Point the Compass</title>
 
 {% endblock %}
 
@@ -12,15 +12,15 @@
 
   {% csrf_token %}
 
-    <main class="mdc-top-app-bar--fixed-adjust">
+    <main id="main" class="mdc-top-app-bar--fixed-adjust">
 
         <div id='banner' class='body-container'>
 
-          <h1 id='banner-title'>NORM THE COMPASS</h1>
+          <h1 id='banner-title'>POINT THE COMPASS</h1>
 
           <div id='banner-text'>
 
-            <p>A project to collect norms for the political compass.</p>
+            <p>Collaboratively calibrating the political compass</p>
 
           </div>
 
@@ -89,7 +89,7 @@
 
           <h2 id='compass-title'> THE COMPASS </h2>
 
-          <p id="compass-body"> Below you can see norms for the top 20 topics. </p>
+          <p id="compass-body"> Below are the mean coordinates for the top 20 topics. </p>
 
         </div>
 
@@ -168,6 +168,34 @@
 
       </div>
 
+       <!-- About -->
+
+      <div class='body-container'>
+
+        <h2 id='compass-title'> ABOUT </h2>
+
+        <p>
+          The <a href="https://www.politicalcompass.org/" target="_blank">political compass</a> is an attempt to represent political views
+          in a two-dimensional space. The x-axis is the <i>economic scale</i>, with economically left-wing views on the left, and economically right-wing
+          views on the right. 
+          The y-axis is the <i>social scale</i>, with authoritarian
+          views at the top, and libertarian views at the bottom. <b>Point the Compass</b> is an attempt to crowdsource data about what these dimensions mean to different people.
+      </p>
+
+      <p>
+        When discussing politics, people often disagree about how topics should be defined along poltical dimensions, and what those dimensions themselves mean. This project asks whether it's possible to define a generally accepted political landscape. Hopefully, the project will lead to a better shared understanding of terms like "left wing" and "right wing" and higher agreement on where prominent people and policies lie in this landscape. Alternatively, however, it might indicate that there is fundamental disagreement about how these terms and dimensions should be interpreted.
+      </p>
+
+      <p>
+        If you have any feedback, feature requests, data analysis ideas, or other thoughts about the project, feel free to send me an email at <a href="mailto:cameronrobertjones@gmail.com">cameronrobertjones@gmail.com</a>.
+      </p>
+
+      </div>
+
+    </main>
+
+    {% include 'ntc/footer.html' %}
+
 
     {% include 'ntc/notify.html' %}
 
@@ -176,9 +204,6 @@
     {% include 'ntc/create.html' %}
 
     {% include 'ntc/auth.html' %}
-
-    </main>
-
 
 
 {{topics|json_script:"topics"}}

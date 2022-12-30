@@ -25,7 +25,7 @@ function validURL(str) {
 }
 
 function searchTopic() {
-    let url = "/ntc/search_topic";
+    let url = "/pointthecompass/search_topic";
     let csrftoken = Cookies.get('csrftoken');
     let headers = {'X-CSRFToken': csrftoken};
     let data = {
@@ -181,7 +181,7 @@ function buildVegaSpec(data) {
               "opacity": {"value": 0.8},
               "stroke": {"value": "black"},
               "fill": {"value": "red"},
-              "href": {"signal": "'/ntc/vote/' + datum.topic_id"},
+              "href": {"signal": "'/pointthecompass/vote/' + datum.topic_id"},
               "tooltip": {"signal": "{'Topic': datum.topic_name, 'Category': datum.category}"},
               "cursor": {"value": "pointer"}
             },
@@ -267,7 +267,7 @@ function defaultUser() {
 function defaultUserMenu() {
     let userMenu = {
             open: false,
-            mode: "login",
+            mode: "signup",
             login: {
                 username: "",
                 password: "",
@@ -581,7 +581,7 @@ var app = new Vue({
         loadTopic: function(topic) {
             this.topic = topic;
             let html = document.getElementsByTagName("html").innerHTML;
-            let urlPath = "/ntc/vote/" + topic.id + "/";
+            let urlPath = "/pointthecompass/vote/" + topic.id + "/";
             window.history.replaceState({"html":html, "pageTitle":document.title},"", urlPath);
             if (topic.info.user_vote != null) {
                 this.vote = topic.info.user_vote;
@@ -616,7 +616,7 @@ var app = new Vue({
         nextTopic: function() {
             // Async update if user is already voting
             if (this.page == "vote") {
-                let url = "/ntc/next_topic/";
+                let url = "/pointthecompass/next_topic/";
                 this.axios.get(url)
                     .then(response => {
                         if (response && response.data) {
@@ -646,7 +646,7 @@ var app = new Vue({
                     });
             } else {
                 // Redirect if user is home
-                window.location.href = "/ntc/vote/";
+                window.location.href = "/pointthecompass/vote/";
             }
         },
 
@@ -654,7 +654,7 @@ var app = new Vue({
         getTopic: function(topic_id) {
             // Async update if user is already voting
             if (this.page == "vote") {
-                let url = `/ntc/get_topic/${topic_id}/`;
+                let url = `/pointthecompass/get_topic/${topic_id}/`;
                 this.axios.get(url)
                     .then(response => {
                         if (response && response.data) {
@@ -663,13 +663,13 @@ var app = new Vue({
                         }
                 });
             } else {
-                window.location.href = `/ntc/vote/${topic_id}/`;
+                window.location.href = `/pointthecompass/vote/${topic_id}/`;
             }
         },
 
         // Get random topic
         randomTopic: function() {
-            let url = `/ntc/random_topic/`;
+            let url = `/pointthecompass/random_topic/`;
             this.axios.get(url)
                 .then(response => {
                     if (response && response.data) {
@@ -680,7 +680,7 @@ var app = new Vue({
         
         // Submit vote
         submitVote: function() {
-            let url = "/ntc/submit_vote/";
+            let url = "/pointthecompass/submit_vote/";
             let data = {
                     "topic_id": this.topic.id,
                     "x": this.vote.x,
@@ -705,7 +705,7 @@ var app = new Vue({
 
         // Submit vote
         skipTopic: function() {
-            let url = "/ntc/skip_topic/";
+            let url = "/pointthecompass/skip_topic/";
             let data = {
                     "topic_id": this.topic.id};
 
@@ -776,7 +776,7 @@ var app = new Vue({
         },
 
         checkTopicDuplicates: function () {
-            let url = "/ntc/check_topic_duplicates/";
+            let url = "/pointthecompass/check_topic_duplicates/";
             let csrftoken = Cookies.get('csrftoken');
             let headers = {'X-CSRFToken': csrftoken};
             let data = {"queries":
@@ -815,7 +815,7 @@ var app = new Vue({
             this.search.searches.push(query);
 
             // Create URL and params
-            let url = "/ntc/search_topic";
+            let url = "/pointthecompass/search_topic";
             let params = {"query": query};
 
             // Make API Call
@@ -911,7 +911,7 @@ var app = new Vue({
         },
 
         createTopic: function() {
-            let url = "/ntc/create_topic/";
+            let url = "/pointthecompass/create_topic/";
             let csrftoken = Cookies.get('csrftoken');
             let headers = {'X-CSRFToken': csrftoken};
             let data = {
@@ -965,7 +965,7 @@ var app = new Vue({
         },
 
         getUserData: function() {
-            let url = '/ntc/get_user_data/';
+            let url = '/pointthecompass/get_user_data/';
             let csrftoken = Cookies.get('csrftoken');
             let headers = {'X-CSRFToken': csrftoken};
             axios.get(url,{},{headers: headers})
@@ -1005,7 +1005,7 @@ var app = new Vue({
                 if (this.user.is_authenticated & this.user.guest == false) {
                     this.userMenu.mode = "profile";
                 } else {
-                    this.userMenu.mode = "login";
+                    this.userMenu.mode = "signup";
                 }
             }
             this.userMenu.open = true;
@@ -1016,7 +1016,7 @@ var app = new Vue({
             },
 
         loginUser: function() {
-            let url = '/ntc/login_user/';
+            let url = '/pointthecompass/login_user/';
             let csrftoken = Cookies.get('csrftoken');
             let headers = {'X-CSRFToken': csrftoken};
             let data = this.userMenu.login;
@@ -1039,7 +1039,7 @@ var app = new Vue({
         },
 
         logout: function() {
-            let url = '/ntc/logout/'
+            let url = '/pointthecompass/logout/'
             let csrftoken = Cookies.get('csrftoken');
             let headers = {'X-CSRFToken': csrftoken};
             axios.get(url,{headers: headers})
@@ -1049,7 +1049,7 @@ var app = new Vue({
                     this.user = defaultUser();
                     this.userMenu = defaultUserMenu();
                     this.modal = "";
-                    window.location.href = "/ntc/";
+                    window.location.href = "/pointthecompass/";
                     this.notify("You have been logged out", "Okay",
                         "success.");
                 } else {
@@ -1062,7 +1062,7 @@ var app = new Vue({
         },
 
         signup: function() {
-            let url = '/ntc/signup/';
+            let url = '/pointthecompass/signup/';
             let csrftoken = Cookies.get('csrftoken');
             let headers = {'X-CSRFToken': csrftoken};
             let data = this.userMenu.signup;
