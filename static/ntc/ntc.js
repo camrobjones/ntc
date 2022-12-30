@@ -60,8 +60,8 @@ const cat2name = {
 function buildVegaSpec(data) {
     let spec = {
       "$schema": "https://vega.github.io/schema/vega/v5.json",
-      "width": 600,
-      "height": 600,
+      "width": {"signal": "containerSize()[0]"},
+      "height": {"signal": "containerSize()[1]"},
       "padding": 5,
       "data": [
         {
@@ -112,7 +112,7 @@ function buildVegaSpec(data) {
                 "source": "window",
                 "type": "load"
               },
-              "update": "containerSize()[0]"
+              "update": "containerSize()[1]"
             }
           ]
         }
@@ -752,9 +752,9 @@ var app = new Vue({
             } else {
                 this.modal = "auth";
                 this.getUserData();
-                Vue.nextTick(function(){
-                    app.drawCompassCoords(app.user.votes, '#vis-user');
-                });
+                // Vue.nextTick(function(){
+                //     app.drawCompassCoords(app.user.votes, '#vis-user');
+                // });
             }
         },
 
@@ -976,7 +976,10 @@ var app = new Vue({
 
                     // Update user compasss
                     if (this.modal=="auth") {
-                        app.drawCompassCoords(app.user.votes, '#vis-user');
+                        setTimeout(function(){
+                            app.drawCompassCoords(app.user.votes, '#vis-user');
+                        }, 200);
+                        // app.drawCompassCoords(app.user.votes, '#vis-user');
                     }
                 } else {
                     this.userMenu.signup.errors = response.data.errors;

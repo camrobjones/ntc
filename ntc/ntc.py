@@ -10,6 +10,7 @@ import random
 import logging
 from statistics import mean
 from copy import deepcopy
+import re
 
 import numpy as np
 from django.core.exceptions import ValidationError
@@ -200,7 +201,6 @@ def add_tag_to_topic(tag, topic):
 
     topic.tags.add(tag)
 
-
 def create_topic(data):
     """Create new topic object"""
     # TODO: Refactor as class based validator/factory
@@ -210,6 +210,9 @@ def create_topic(data):
 
     # Remove tags
     tags = data.pop('tags', [])
+
+    # Clean URL
+    data["url"] = re.sub("en.m.wikipedia.org", "en.wikipedia.org", data["url"])
 
     # Create topic object
     topic = models.Topic(**data)
