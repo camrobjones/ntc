@@ -140,7 +140,7 @@ def get_user(request, create_guest=True):
             return {"is_authenticated": False}
 
         user = create_guest_user()
-        login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     profile = get_profile(user)
 
